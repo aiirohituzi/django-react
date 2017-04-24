@@ -6,7 +6,7 @@ class Posting(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField()
     
-    owner = models.ForeignKey('auth.User', related_name='snippets')  
+    owner = models.ForeignKey('auth.User', related_name='posting')  
 
     class Meta:
         ordering = ('created',)
