@@ -9,7 +9,7 @@ module.exports = {
     devServer: {
         inline: true,
         port: 7777,
-        contentBase: __dirname + '/public/'
+        contentBase: __dirname + '/public/',
     },
 
     module: {
