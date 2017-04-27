@@ -1,16 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-
 import App from './App';
-import Home from './containers/Home';
-import Link1 from './containers/Link1';
-import Link2 from './containers/Link2';
 
-// const rootElement = document.getElementById('root');
-// ReactDOM.render(<App />, rootElement);
+const rootElement = document.getElementById('root');
+ReactDOM.render(<App />, rootElement);
 
-ReactDOM.render(
+/*ReactDOM.render(
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
@@ -19,4 +14,4 @@ ReactDOM.render(
     </Route>
   </Router>,
   document.getElementById('root')
-);
+);*/

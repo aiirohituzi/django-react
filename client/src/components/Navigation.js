@@ -11,11 +11,16 @@ export default class Navigation extends React.Component {
     constructor(props) {
         super(props);
         this.handleLink1 = this.handleLink1.bind(this);
+        this.handleLink2 = this.handleLink2.bind(this);
     }
 
     handleLink1(e) {
-        console.log(e, 'is selected');
-       
+        // console.log(e, 'is selected');
+        location.href = './Link1';
+    }
+
+    handleLink2(e) {
+        location.href = './Link2';
     }
 
     render() {
@@ -23,14 +28,14 @@ export default class Navigation extends React.Component {
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#">React-Bootstrap</a>
+                        <a href="./">React-Bootstrap</a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
                         <NavItem eventKey={1} onSelect={this.handleLink1}>Link1</NavItem>
-                        <NavItem eventKey={2} href="#">Link2</NavItem>
+                        <NavItem eventKey={2} onSelect={this.handleLink2}>Link2</NavItem>
                         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                             <MenuItem eventKey={3.1}>Action</MenuItem>
                             <MenuItem eventKey={3.2}>Another action</MenuItem>
