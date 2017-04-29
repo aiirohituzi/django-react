@@ -13,17 +13,41 @@ module.exports = {
         historyApiFallback: true,
     },
 
+    // module: {
+    //         loaders: [
+    //             {
+    //                 test: /\.js$/,
+    //                 loader: 'babel-loader',
+    //                 exclude: /node_modules/,
+    //                 query: {
+    //                     cacheDirectory: true,
+    //                     presets: [['es2015', {modules: false}], 'react'],
+    //                     plugin: [
+    //                         'syntax-dynamic-import',
+    //                         'transform-async-to-generator',
+    //                         'transform-regenerator',
+    //                         'transform-runtime'
+    //                     ]
+    //                 }
+    //             }
+    //         ]
+    //     }
     module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    loader: 'babel-loader',
-                    exclude: /node_modules/,
-                    query: {
-                        cacheDirectory: true,
-                        presets: ['es2015', 'react']
-                    }
+        rules: [{
+            test: /\.js$/,
+            exclude: /(node_modules)/,
+            use: [{
+                loader: 'babel-loader',
+                options: {
+                    presets: [['es2015', {modules: false}], 'react'],
+                    plugins: [
+                        'transform-async-to-generator',
+                        'transform-class-properties',
+                        'transform-regenerator',
+                        'transform-runtime'
+                    ]
                 }
-            ]
-        }
+            }]
+        }]
+    }
 };
