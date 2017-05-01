@@ -16,7 +16,7 @@ export default class Navigation extends React.Component {
 
     handleLink1(e) {
         // console.log(e, 'is selected');
-        location.href = './Link1';
+        location.href = './Post';
     }
 
     handleLink2(e) {

@@ -5,7 +5,7 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import * as service from '../services/post';
 import Post from '../components/Post/Post';
 
-export default class Link1 extends React.Component {
+export default class PostContainer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -23,9 +23,10 @@ export default class Link1 extends React.Component {
     }
 
     fetchPostInfo = async (postId) => {
-        const info = await service.getPost(postId);
+        const info = await service.getPost();
+        console.log(info.data.results[0]);
 
-        const {title, content} = info.data; 
+        const {title, content} = info.data.results[0]; 
 
         this.setState({
             postId,
