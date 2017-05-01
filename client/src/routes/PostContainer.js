@@ -1,52 +1,79 @@
 import React from 'react';
 import axios from 'axios';
-import Button from 'react-bootstrap/lib/Button';
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+
 import * as service from '../services/post';
 import Post from '../components/Post/Post';
+
+import { Button, ButtonToolbar, Grid, Row, Col } from 'react-bootstrap';
+// import Button from 'react-bootstrap/lib/Button';
+// import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+// import Grid from 'react-bootstrap/lib/Grid';
+// import Row from 'react-bootstrap/lib/Row';
+// import Col from 'react-bootstrap/lib/Col';
 
 export default class PostContainer extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            postId: 1,
-            post: {
-                title: null,
-                content: null
-            }
+            postInfo: null,
+            postCount: 4,
+            btnValue: "더 보기"
         };
+
+        this.handleMore = this.handleMore.bind(this);
     }
 
     componentDidMount() {
-        this.fetchPostInfo(1);
+        this.fetchPostInfo();
     }
 
-    fetchPostInfo = async (postId) => {
+    fetchPostInfo = async () => {
         const info = await service.getPost();
-        console.log(info.data.results[0]);
 
-        const {title, content} = info.data.results[0]; 
-
+        const postInfo = info.data.results;
         this.setState({
-            postId,
-            post: {
-                title, 
-                content
-            }
+            postInfo
         });
     }
 
+    handleMore(e) {
+        const postInfo = this.state.postInfo;
+        if(postInfo[this.state.postCount] === undefined){
+            this.setState({
+                btnValue: "게시물이 더 이상 존재하지 않습니다."
+            })
+        } else{
+            this.setState({
+                postCount: this.state.postCount+4
+            });
+        }
+    }
+
     render() {
-        const {postId, post} = this.state;
+        const postInfo = this.state.postInfo;
+        const postCount = this.state.postCount;
+        const btnValue = this.state.btnValue;
 
         return (
             <div>
-                <Post
-                    postId={postId}
-                    title={post.title}
-                    content={post.content}
-                />
+                <Grid>
+                    <Row>
+                        <Col>
+                            <Post
+                                postCount={ postCount }
+                                postInfo={ postInfo }
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={12}>
+                            <ButtonToolbar>
+                                <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
+                            </ButtonToolbar>
+                        </Col>
+                    </Row>
+                </Grid>
             </div>
         );
     }

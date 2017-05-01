@@ -10,17 +10,18 @@ export default class Navigation extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleLink1 = this.handleLink1.bind(this);
-        this.handleLink2 = this.handleLink2.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
-    handleLink1(e) {
-        // console.log(e, 'is selected');
-        location.href = './Post';
-    }
-
-    handleLink2(e) {
-        location.href = './Link2';
+    handleSelect(e) {
+        switch(e){
+            case 1:
+                location.href = './Post';
+                break;
+            case 2:
+                location.href = './Link2';
+                break;
+        }
     }
 
     render() {
@@ -34,8 +35,8 @@ export default class Navigation extends React.Component {
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem eventKey={1} onSelect={this.handleLink1}>Link1</NavItem>
-                        <NavItem eventKey={2} onSelect={this.handleLink2}>Link2</NavItem>
+                        <NavItem eventKey={1} onSelect={this.handleSelect}>게시물</NavItem>
+                        <NavItem eventKey={2} onSelect={this.handleSelect}>Link2</NavItem>
                         <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
                             <MenuItem eventKey={3.1}>Action</MenuItem>
                             <MenuItem eventKey={3.2}>Another action</MenuItem>

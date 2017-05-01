@@ -1,91 +1,63 @@
 import React from 'react';
 
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import Thumbnail from 'react-bootstrap/lib/Thumbnail';
-import Button from 'react-bootstrap/lib/Button';
+import { Grid, Row, Col, Thumbnail, Button } from 'react-bootstrap';
+// import Grid from 'react-bootstrap/lib/Grid';
+// import Row from 'react-bootstrap/lib/Row';
+// import Col from 'react-bootstrap/lib/Col';
+// import Thumbnail from 'react-bootstrap/lib/Thumbnail';
+// import Button from 'react-bootstrap/lib/Button';
 
 class Post extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            postInfo: {
-                title: null,
-                content: null
-            }
+            postInfo: null,
+            postCount: null,
         }
     }
 
     componentWillReceiveProps (nextProps) {
         
-        const { title, content } = nextProps;
+        const { postInfo, postCount } = nextProps;
         
         this.setState({
-            postInfo: {
-                title, content
-            }
+            postInfo,
+            postCount
         })
     }
     
     render() {
-        const { title, content } = this.state.postInfo;
-        console.log(title);
-        console.log('contente: '+content);
+        const postInfo = this.state.postInfo;
+        const postCount = this.state.postCount;
 
-        const thumbnailInstance = (
-            <Grid>
-                <Row>
-                    <Col xs={12} sm={6} md={4}>
+        const thumbnailInstance = [];
+        for(var i=0; i<postCount; i++) {
+            if(postInfo[i] !== undefined){
+                thumbnailInstance.push(
+                    <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
                         <Thumbnail>
-                            <h3>{title}</h3>
-                            <p>{content}</p>
+                            <h3>{postInfo[i].title}</h3>
+                            <p>{postInfo[i].content}</p>
                             <p>
                             <Button bsStyle="primary">Button</Button>&nbsp;
                             <Button bsStyle="default">Button</Button>
                             </p>
                         </Thumbnail>
                     </Col>
-                    <Col xs={12} sm={6} md={4}>
-                        <Thumbnail>
-                            <h3>Title</h3>
-                            <p>Content</p>
-                            <p>
-                            <Button bsStyle="primary">Button</Button>&nbsp;
-                            <Button bsStyle="default">Button</Button>
-                            </p>
-                        </Thumbnail>
-                    </Col>
-                    <Col xs={12} sm={6} md={4}>
-                        <Thumbnail>
-                            <h3>Title</h3>
-                            <p>Content</p>
-                            <p>
-                            <Button bsStyle="primary">Button</Button>&nbsp;
-                            <Button bsStyle="default">Button</Button>
-                            </p>
-                        </Thumbnail>
-                    </Col>
-                    <Col xs={12} sm={6} md={4}>
-                        <Thumbnail>
-                            <h3>Title</h3>
-                            <p>Content</p>
-                            <p>
-                            <Button bsStyle="primary">Button</Button>&nbsp;
-                            <Button bsStyle="default">Button</Button>
-                            </p>
-                        </Thumbnail>
-                    </Col>
-                </Row>
-            </Grid>
-        );
+                );
+            }
+        }        
  
         // show nothing when data is not loaded
-        if(title===null) return null;
+        if(postInfo === null) return null;
  
         return (
             <div>
-                {thumbnailInstance}
+                <Grid>
+                    <Row>
+                        {thumbnailInstance}
+                    </Row>
+                </Grid>
             </div>
         );
     }
