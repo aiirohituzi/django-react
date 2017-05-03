@@ -21,12 +21,15 @@ from rest_framework import routers
 
 from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()  
-router.register(r'posting', views.PostingViewSet)  
+from posting.views import uploadPost
+
+router = DefaultRouter()
+router.register(r'posting', views.PostingViewSet)
 router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^upload/$', uploadPost, name='upload'),
 ]

@@ -29,7 +29,7 @@ export default class Navigation extends React.Component {
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="./">React-Bootstrap</a>
+                        <a href="./"><b>aiirohituzi</b></a>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
