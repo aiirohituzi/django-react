@@ -21,7 +21,7 @@ from django.utils.functional import SimpleLazyObject
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
-    queryset = Posting.objects.all()
+    queryset = Posting.objects.all().order_by('-id')
     serializer_class = PostingSerializer
 
     def perform_create(self, serializer):
