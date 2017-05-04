@@ -16,6 +16,9 @@ from django.views.decorators.csrf import csrf_exempt
 from posting.forms import PostForm
 import json
 
+from django.contrib.auth import models
+from django.utils.functional import SimpleLazyObject
+
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
     queryset = Posting.objects.all()
@@ -40,10 +43,16 @@ def api_root(request, format=None):
 @csrf_exempt
 def uploadPost(request):
     form = PostForm(request.POST)
-    # if form.is_valid():
-    #     obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
-    #     obj.user = request.user
-    #     obj.save()      # obj.save(commit=True) 와 동일
 
-    # print(request.POST)
+    row = models.User.objects.get(username=request.POST['user'])
+    # print(row.username)
+    if form.is_valid():
+        obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+        obj.owner_id = row.id
+        obj.save()      # obj.save(commit=True) 와 동일
+        print("Post success")
+    else:
+        print("Post error")
+    # print(request.POST['user'])
+    # print(type(request.user))
     return HttpResponse(json.dumps(request.POST))
