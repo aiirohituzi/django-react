@@ -47,7 +47,7 @@ export default class Navigation extends React.Component {
                     </Nav>
                     <Nav pullRight>
                         <NavItem eventKey={1} href="#">Link Right</NavItem>
-                        <NavItem eventKey={2} href="#">Link Right</NavItem>
+                        <NavItem eventKey={2} href="#"><img src="../image/gear-1119298_1920.png" style={{width: 20}}/></NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

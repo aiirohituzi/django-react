@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Row, Col, Thumbnail, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Thumbnail, Button, Modal } from 'react-bootstrap';
 // import Grid from 'react-bootstrap/lib/Grid';
 // import Row from 'react-bootstrap/lib/Row';
 // import Col from 'react-bootstrap/lib/Col';
@@ -13,7 +13,11 @@ class Post extends React.Component {
         this.state = {
             postInfo: null,
             postCount: null,
+            showModal: false,
         }
+
+        this.close = this.close.bind(this);
+        this.open = this.open.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -24,6 +28,15 @@ class Post extends React.Component {
             postInfo,
             postCount
         })
+    }
+
+    close() {
+        this.setState({ showModal: false });
+    }
+
+    open(idx) {
+        this.setState({ showModal: true });
+        console.log('clicked ' + idx);
     }
     
     render() {
@@ -39,14 +52,29 @@ class Post extends React.Component {
                             <h3>{postInfo[i].title}</h3>
                             <p>{postInfo[i].content}</p>
                             <p>
-                            <Button bsStyle="primary">Button</Button>&nbsp;
+                            <Button bsStyle="primary" onClick={ () => this.open(i) }>Button</Button>&nbsp;
                             <Button bsStyle="default">Button</Button>
                             </p>
                         </Thumbnail>
                     </Col>
                 );
             }
-        }        
+            console.log("for i : " + i);
+        }
+
+        const modalInstance = (
+            <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.close}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
  
         // show nothing when data is not loaded
         if(postInfo === null) return null;
@@ -56,6 +84,7 @@ class Post extends React.Component {
                 <Grid>
                     <Row>
                         {thumbnailInstance}
+                        {modalInstance}
                     </Row>
                 </Grid>
             </div>
