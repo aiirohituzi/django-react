@@ -35,7 +35,7 @@ class Post extends React.Component {
     }
 
     open(idx) {
-        this.setState({ showModal: true });
+        // this.setState({ showModal: true });
         console.log('clicked ' + idx);
     }
     
@@ -52,7 +52,7 @@ class Post extends React.Component {
                             <h3>{postInfo[i].title}</h3>
                             <p>{postInfo[i].content}</p>
                             <p>
-                            <Button bsStyle="primary" onClick={ () => this.open(i) }>Button</Button>&nbsp;
+                            <Button bsStyle="primary" onClick={ () => this.open() }>Button</Button>&nbsp;
                             <Button bsStyle="default">Button</Button>
                             </p>
                         </Thumbnail>
