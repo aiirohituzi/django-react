@@ -24,6 +24,16 @@ export default class Navigation extends React.Component {
         }
     }
 
+    handleSelectRight(e) {
+        switch(e){
+            case 1:
+                break;
+            case 2:
+                location.href = './Admin';
+                break;
+        }
+    }
+
     render() {
         return (
             <Navbar inverse collapseOnSelect>
@@ -47,7 +57,7 @@ export default class Navigation extends React.Component {
                     </Nav>
                     <Nav pullRight>
                         <NavItem eventKey={1} href="#">Link Right</NavItem>
-                        <NavItem eventKey={2} href="#"><img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/gear-1119298_1920.png")} style={{width: 20}}/></NavItem>
+                        <NavItem eventKey={2} onSelect={this.handleSelectRight}><img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/gear-1119298_1920.png")} style={{width: 20}}/></NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

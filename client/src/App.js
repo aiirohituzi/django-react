@@ -5,6 +5,7 @@ import Navigation from './components/Navigation'
 import Home from './routes/Home';
 import PostContainer from './routes/PostContainer';
 import Link2 from './routes/Link2';
+import Admin from './routes/Admin';
 
 class App extends React.Component {
     render(){
@@ -17,6 +18,7 @@ class App extends React.Component {
                             <Route exact path="/" component={Home}/>
                             <Route path="/Post" component={PostContainer}/>
                             <Route path="/Link2" component={Link2}/>
+                            <Route path="/Admin" component={Admin}/>
                         </Switch>
                     </div>
                 </div>
