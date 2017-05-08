@@ -22,6 +22,7 @@ from rest_framework import routers
 from rest_framework.routers import DefaultRouter
 
 from posting.views import uploadPost
+from posting.views import deletePost
 
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
@@ -32,4 +33,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^upload/$', uploadPost, name='upload'),
+    url(r'^delete/$', deletePost, name='delete'),
 ]

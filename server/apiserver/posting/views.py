@@ -56,3 +56,15 @@ def uploadPost(request):
     # print(request.POST['user'])
     # print(type(request.user))
     return HttpResponse(json.dumps(request.POST))
+
+@csrf_exempt
+def deletePost(request):
+    row = Posting.objects.get(id=request.POST['id'])
+    
+    if row != None:
+        row.delete()
+        print("Delete success")
+    else:
+        print("Delete error")
+
+    return HttpResponse(json.dumps(request.POST))
