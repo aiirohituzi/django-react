@@ -46,6 +46,8 @@ class Post extends React.Component {
         const thumbnailInstance = [];
         for(var i=0; i<postCount; i++) {
             if(postInfo[i] !== undefined){
+                console.log('확인된 포스트 id : ' + postInfo[i].id)
+                console.log(thumbnailInstance)
                 thumbnailInstance.push(
                     <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
                         <Thumbnail>
@@ -59,7 +61,7 @@ class Post extends React.Component {
                     </Col>
                 );
             }
-            console.log("for i : " + i);
+            // console.log("for i : " + i);
         }
 
         const modalInstance = (
