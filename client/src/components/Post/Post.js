@@ -14,10 +14,11 @@ class Post extends React.Component {
             postInfo: null,
             postCount: null,
             showModal: false,
+            clickedId: 1,
         }
 
         this.close = this.close.bind(this);
-        this.open = this.open.bind(this);
+        //this.detail = this.detail.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -34,40 +35,44 @@ class Post extends React.Component {
         this.setState({ showModal: false });
     }
 
-    open(idx) {
-        // this.setState({ showModal: true });
+    detail(idx) {
+        this.setState({
+            showModal: true,
+            clickedId: idx,
+        });
         console.log('clicked ' + idx);
+        console.log(this.state.clickedId);
     }
     
     render() {
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
+        const clickedId = this.state.clickedId;
 
         const thumbnailInstance = [];
         for(var i=0; i<postCount; i++) {
             if(postInfo[i] !== undefined){
-                console.log('확인된 포스트 id : ' + postInfo[i].id)
-                console.log(thumbnailInstance)
+                // console.log('확인된 포스트 id : ' + postInfo[i].id)
+                // console.log(thumbnailInstance)
                 thumbnailInstance.push(
                     <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
                         <Thumbnail>
                             <h3>{postInfo[i].title}</h3>
                             <p>{postInfo[i].content}</p>
                             <p>
-                            <Button bsStyle="primary" onClick={ () => this.open() }>Button</Button>&nbsp;
+                            <Button bsStyle="primary" onClick={ this.detail.bind(this, postInfo[i].id) }>Button</Button>&nbsp;
                             <Button bsStyle="default">Button</Button>
                             </p>
                         </Thumbnail>
                     </Col>
                 );
             }
-            // console.log("for i : " + i);
         }
 
         const modalInstance = (
             <Modal show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     
