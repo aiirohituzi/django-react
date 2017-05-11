@@ -15,6 +15,8 @@ class Post extends React.Component {
             postCount: null,
             showModal: false,
             clickedId: 1,
+            clickedTitle: null,
+            clickedContent: null,
         }
 
         this.close = this.close.bind(this);
@@ -35,13 +37,21 @@ class Post extends React.Component {
         this.setState({ showModal: false });
     }
 
-    detail(idx) {
+    detail = async (id, title, content) => {
+        await this.setState({
+            clickedId: id,
+            clickedTitle: title,
+            clickedContent: content,
+        });
+        this.modalOpen();
+        // console.log('clicked ' + idx);
+    }
+
+    modalOpen() {
         this.setState({
             showModal: true,
-            clickedId: idx,
         });
-        console.log('clicked ' + idx);
-        console.log(this.state.clickedId);
+        // console.log('clickId : ' + this.state.clickedId);
     }
     
     render() {
@@ -58,10 +68,10 @@ class Post extends React.Component {
                     <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
                         <Thumbnail>
                             <h3>{postInfo[i].title}</h3>
-                            <p>{postInfo[i].content}</p>
-                            <p>
-                            <Button bsStyle="primary" onClick={ this.detail.bind(this, postInfo[i].id) }>Button</Button>&nbsp;
-                            <Button bsStyle="default">Button</Button>
+                            <hr/>
+                            {/*<p>{postInfo[i].content}</p>*/}
+                            <p style={{textAlign:"right"}}>
+                                <Button bsStyle="primary" onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>내용 보기</Button>
                             </p>
                         </Thumbnail>
                     </Col>
@@ -69,13 +79,16 @@ class Post extends React.Component {
             }
         }
 
+        const clickedTitle = this.state.clickedTitle;
+        const clickedContent = this.state.clickedContent;
+
         const modalInstance = (
             <Modal show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
-                    <Modal.Title></Modal.Title>
+                    <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    
+                    {clickedContent}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
