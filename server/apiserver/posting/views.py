@@ -17,9 +17,10 @@ from posting.forms import PostForm
 import json
 
 from django.contrib.auth import models
-from django.utils.functional import SimpleLazyObject
 
-from django.http import Http404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.conf import settings
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
@@ -67,6 +68,10 @@ def uploadPost(request):
 
 @csrf_exempt
 def deletePost(request):
+    # row = models.User.objects.get(username=request.POST['user'])
+    if not request.user.is_authenticated():
+        return HttpResponse(False)
+
     result = False
     log = ''
 
