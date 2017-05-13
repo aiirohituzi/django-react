@@ -21,6 +21,7 @@ from django.contrib.auth import models
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
@@ -68,8 +69,17 @@ def uploadPost(request):
 
 @csrf_exempt
 def deletePost(request):
-    # row = models.User.objects.get(username=request.POST['user'])
-    if not request.user.is_authenticated():
+    # userInfo = User.objects.get(username=request.POST['user'])
+    username = request.POST['user']
+    password = request.POST['password']
+
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+
+    print(login_valid)
+    print(pwd_valid)
+
+    if not login_valid and pwd_valid:
         return HttpResponse(False)
 
     result = False
