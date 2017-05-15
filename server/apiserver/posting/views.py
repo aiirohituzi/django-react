@@ -76,8 +76,8 @@ def deletePost(request):
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
 
-    print(login_valid)
-    print(pwd_valid)
+    # print(login_valid)
+    # print(pwd_valid)
 
     if not login_valid and pwd_valid:
         return HttpResponse(False)
@@ -100,3 +100,25 @@ def deletePost(request):
         print("Delete Post Request : Delete error")
 
     return HttpResponse(result)
+
+@csrf_exempt
+def login(request):
+    print('Admin Login Request...')
+    username = request.POST.get('user', False)
+    password = request.POST.get('password', False)
+
+    print(username)
+    print(password)
+
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+
+    print(login_valid)
+    print(pwd_valid)
+
+    if not (login_valid and pwd_valid):
+        print('Login Failed')
+        return HttpResponse(False)
+    else:
+        print('Success Login')
+        return HttpResponse(True)

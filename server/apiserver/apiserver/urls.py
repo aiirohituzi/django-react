@@ -34,4 +34,5 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^upload/$', uploadPost, name='upload'),
     url(r'^delete/$', deletePost, name='delete'),
+    url(r'^login/$', views.login, name='login')
 ]

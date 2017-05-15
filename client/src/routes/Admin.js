@@ -1,6 +1,7 @@
 import React from 'react';
+import * as service from '../services/login';
 
-import { Button, Form, FormGroup, Col, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, Form, FormGroup, Grid, Row, Col, ControlLabel, FormControl } from 'react-bootstrap';
 
 class Admin extends React.Component {
     constructor(props) {
@@ -10,16 +11,33 @@ class Admin extends React.Component {
             loginStatus: false,
             loginId: null
         };
+
+        this.login = this.login.bind(this);
     }
 
-    componentWillReceiveProps (nextProps) {
-        
-        const { loginStatus, loginId } = nextProps;
+    componentWillReceiveProps(nextProps) {
+        if (sessionStorage.getItem('loginStatus') != null){
+            var loginStatus = sessionStorage.getItem('loginStatus');
+        }
         
         this.setState({
             loginStatus,
             loginId
         })
+    }
+    
+    login() {
+        var temp = service.getAuth()
+        if(temp){
+            sessionStorage.setItem('loginStatus', true);
+        }
+        console.log(temp)
+        // var temp = sessionStorage.getItem('loginStatus');
+        // console.log(temp);
+    }
+
+    logout() {
+        sessionStorage.removeItem('loginStatus');
     }
     
     render() {
@@ -30,12 +48,13 @@ class Admin extends React.Component {
             adminInstance.push(
                 <div>
                     login
+                    <Button onClick={this.logout}>Sing out</Button>
                 </div>
             );
         }else {
             adminInstance.push(
                 <Form horizontal>
-                    <FormGroup controlId="formHorizontalEmail">
+                    <FormGroup controlId="formId">
                         <Col componentClass={ControlLabel} sm={2}>
                             ID
                         </Col>
@@ -44,7 +63,7 @@ class Admin extends React.Component {
                         </Col>
                     </FormGroup>
 
-                    <FormGroup controlId="formHorizontalPassword">
+                    <FormGroup controlId="formPassword">
                         <Col componentClass={ControlLabel} sm={2}>
                             Password
                         </Col>
@@ -55,7 +74,7 @@ class Admin extends React.Component {
 
                     <FormGroup>
                         <Col smOffset={2} sm={10}>
-                            <Button type="submit">
+                            <Button onClick={this.login}>
                                 Sign in
                             </Button>
                         </Col>
@@ -66,7 +85,13 @@ class Admin extends React.Component {
 
         return (
             <div>
-                {adminInstance}
+                <Grid>
+                    <Row>
+                        <Col>
+                            {adminInstance}
+                        </Col>
+                    </Row>
+                </Grid>
             </div>
         );
     }
