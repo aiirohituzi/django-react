@@ -29,7 +29,7 @@ class PostingViewSet(viewsets.ModelViewSet):
     serializer_class = PostingSerializer
 
     def perform_create(self, serializer):
-            serializer.save(owner=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet): 
@@ -104,6 +104,14 @@ def deletePost(request):
 @csrf_exempt
 def login(request):
     print('Admin Login Request...')
+    # if 'user' in request.POST:
+    #     username = request.POST['user']
+    # else:
+    #     username = False
+    # if 'password' in request.POST:
+    #     password = request.POST['password']
+    # else:
+    #     password = False
     username = request.POST.get('user', False)
     password = request.POST.get('password', False)
 
