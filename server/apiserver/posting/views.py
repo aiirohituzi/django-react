@@ -103,26 +103,30 @@ def deletePost(request):
 
 @csrf_exempt
 def login(request):
+    print(json.loads(request.body))
     print('Admin Login Request...')
-    # if 'user' in request.POST:
-    #     username = request.POST['user']
-    # else:
-    #     username = False
-    # if 'password' in request.POST:
-    #     password = request.POST['password']
-    # else:
-    #     password = False
-    username = request.POST.get('user', False)
-    password = request.POST.get('password', False)
 
-    print(username)
-    print(password)
+    # username = request.POST.get('user', False)
+    # password = request.POST.get('password', False)
+    # Postman에서 Post요청할 경우엔 통용되지만 axios를 통해 Post요청 시엔 불통
+    # 직렬화 관련 문제인듯, 양측의 request.body에 담기는 데이터 자체가 다르다.
+    # Postman :
+    # b'----------------------------418318425319320142162885\r\nContent-Disposition: form-data; name="user"\r\n\r\nadmin\r\n----------------------------418318425319320142162885\r\nContent-Disposition: form-data; name="password"\r\n\r\nasdf1234\r\n----------------------------418318425319320142162885--\r\n'
+    # axios :
+    # b'{"user":"admin","password":"asdf1234"}'
+
+    data = json.loads(request.body)
+    username = data['user']
+    password = data['password']
+
+    # print('ID : ' + username)
+    # print('PW : ' + password)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
 
-    print(login_valid)
-    print(pwd_valid)
+    print('ID Check... ' + str(login_valid))
+    print('PW Check... ' + str(pwd_valid))
 
     if not (login_valid and pwd_valid):
         print('Login Failed')
