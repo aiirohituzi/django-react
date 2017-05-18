@@ -1,5 +1,5 @@
 import React from 'react';
-import * as service from '../services/login';
+import axios from 'axios';
 
 import { Button, Form, FormGroup, Grid, Row, Col, ControlLabel, FormControl } from 'react-bootstrap';
 
@@ -8,36 +8,56 @@ class Admin extends React.Component {
         super(props);
 
         this.state = {
-            loginStatus: false,
+            loginStatus: sessionStorage.getItem('loginStatus'),
             loginId: null
         };
 
         this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (sessionStorage.getItem('loginStatus') != null){
-            var loginStatus = sessionStorage.getItem('loginStatus');
+    shouldComponentUpdate(nextProps, nextState) {
+        // console.log("shouldComponentUpdate: " + JSON.stringify(nextProps)) + " " + JSON. stringify(nextState);
+        if (this.state.loginStatus !== nextState.loginStatus) {
+            return true;
         }
-        
-        this.setState({
-            loginStatus,
-            loginId
-        })
+        return false;
     }
     
-    login() {
-        var temp = service.getAuth()
-        if(temp){
+    login = async () => {
+        var inputId = document.getElementById('formId').value
+        var inputPw = document.getElementById('formPassword').value
+
+        var isLogin = false;
+        await axios.post('http://127.0.0.1:8000/login/', {
+            user: inputId,
+            password: inputPw
+        })
+        .then(function (response) {
+            // console.log(response.data);
+            if(response.data == 'True'){
+                isLogin = true;
+            }
+        })
+        .catch(function (error) {
+            // console.log(error);
+            isLogin = false;
+        });
+
+        console.log(isLogin)
+        if(isLogin){
             sessionStorage.setItem('loginStatus', true);
+            this.setState({
+                loginStatus: true
+            });
         }
-        console.log(temp)
-        // var temp = sessionStorage.getItem('loginStatus');
-        // console.log(temp);
     }
 
     logout() {
         sessionStorage.removeItem('loginStatus');
+        this.setState({
+            loginStatus: false
+        });
     }
     
     render() {
