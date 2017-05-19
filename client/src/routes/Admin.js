@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import AdminMenu from '../components/Admin/AdminMenu';
+
 import { Button, Form, FormGroup, Grid, Row, Col, ControlLabel, FormControl } from 'react-bootstrap';
 
 class Admin extends React.Component {
@@ -44,7 +46,7 @@ class Admin extends React.Component {
             isLogin = false;
         });
 
-        console.log(isLogin)
+        // console.log(isLogin)
         if(isLogin){
             sessionStorage.setItem('loginStatus', true);
             this.setState({
@@ -62,17 +64,17 @@ class Admin extends React.Component {
     
     render() {
         const loginStatus = this.state.loginStatus;
-        const adminInstance = [];
+        const loginInstance = [];
 
         if(loginStatus) {
-            adminInstance.push(
+            loginInstance.push(
                 <div>
-                    login
                     <Button onClick={this.logout}>Sing out</Button>
+                    <AdminMenu/>
                 </div>
             );
         }else {
-            adminInstance.push(
+            loginInstance.push(
                 <Form horizontal>
                     <FormGroup controlId="formId">
                         <Col componentClass={ControlLabel} sm={2}>
@@ -108,7 +110,7 @@ class Admin extends React.Component {
                 <Grid>
                     <Row>
                         <Col>
-                            {adminInstance}
+                            {loginInstance}
                         </Col>
                     </Row>
                 </Grid>

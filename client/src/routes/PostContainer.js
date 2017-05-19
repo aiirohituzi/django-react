@@ -29,7 +29,7 @@ export default class PostContainer extends React.Component {
 
     fetchPostInfo = async () => {
         const info = await service.getPost();
-        console.log(info);
+        // console.log(info);
 
         const postInfo = info.data.results;
         this.setState({
