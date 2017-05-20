@@ -12,6 +12,8 @@ class AdminMenu extends React.Component {
             postCount: 4,
             btnValue: "더 보기"
         };
+
+        this.handleMore = this.handleMore.bind(this);
     }
 
     componentDidMount() {
@@ -29,10 +31,7 @@ class AdminMenu extends React.Component {
     }
 
     handleMore(e) {
-        console.log('asdfasdfasdfasd');
-        console.log(this.state);
         const postInfo = this.state.postInfo;
-        console.log('asdfasdf');
         
         if(postInfo[this.state.postCount] === undefined){
             this.setState({
@@ -49,8 +48,6 @@ class AdminMenu extends React.Component {
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
         const btnValue = this.state.btnValue;
-
-        console.log(postInfo)
 
         const tabsInstance = (
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
