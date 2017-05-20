@@ -68,14 +68,14 @@ class Admin extends React.Component {
 
         if(loginStatus) {
             loginInstance.push(
-                <div>
+                <div key='afterLogin'>
                     <Button onClick={this.logout}>Sing out</Button>
                     <AdminMenu/>
                 </div>
             );
         }else {
             loginInstance.push(
-                <Form horizontal>
+                <Form horizontal key='beforeLogin'>
                     <FormGroup controlId="formId">
                         <Col componentClass={ControlLabel} sm={2}>
                             ID

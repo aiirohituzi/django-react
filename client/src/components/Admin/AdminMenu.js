@@ -1,6 +1,7 @@
 import React from 'react';
 import * as service from '../../services/post';
-import { Tab, Row, Col, Nav, NavItem, ListGroup, ListGroupItem, Button } from 'react-bootstrap';
+import DeletePost from './DeletePost';
+import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
 
 class AdminMenu extends React.Component {
     constructor(props) {
@@ -8,6 +9,8 @@ class AdminMenu extends React.Component {
 
         this.state = {
             postInfo: null,
+            postCount: 4,
+            btnValue: "더 보기"
         };
     }
 
@@ -17,7 +20,7 @@ class AdminMenu extends React.Component {
 
     fetchPostInfo = async () => {
         const info = await service.getPost();
-        console.log(info);
+        // console.log(info);
 
         const postInfo = info.data.results;
         this.setState({
@@ -25,14 +28,29 @@ class AdminMenu extends React.Component {
         });
     }
 
-    render() {
+    handleMore(e) {
+        console.log('asdfasdfasdfasd');
+        console.log(this.state);
         const postInfo = this.state.postInfo;
-        console.log('in render');
-        // var count = Object.keys(postInfo).length;
-        // console.log(count);
-        // const tableInstance = [];
+        console.log('asdfasdf');
+        
+        if(postInfo[this.state.postCount] === undefined){
+            this.setState({
+                btnValue: "게시물이 더 이상 존재하지 않습니다."
+            })
+        } else{
+            this.setState({
+                postCount: this.state.postCount+4
+            });
+        }
+    }
 
-        // for(var i=0; i++; i)
+    render() {        
+        const postInfo = this.state.postInfo;
+        const postCount = this.state.postCount;
+        const btnValue = this.state.btnValue;
+
+        console.log(postInfo)
 
         const tabsInstance = (
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -53,11 +71,11 @@ class AdminMenu extends React.Component {
                         aa
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
-                        <ListGroup>
-                            <ListGroupItem>Some body text</ListGroupItem>
-                            <ListGroupItem href='#'>Linked item</ListGroupItem>
-                            <ListGroupItem>Danger styling</ListGroupItem>
-                        </ListGroup>
+                        <DeletePost
+                            postCount={ postCount }
+                            postInfo={ postInfo }
+                        />
+                        <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
                     </Tab.Pane>
                     </Tab.Content>
                 </Col>
