@@ -11,7 +11,8 @@ class Admin extends React.Component {
 
         this.state = {
             loginStatus: sessionStorage.getItem('loginStatus'),
-            loginId: null
+            loginId: null,
+            loginPw: null
         };
 
         this.login = this.login.bind(this);
@@ -42,15 +43,19 @@ class Admin extends React.Component {
             }
         })
         .catch(function (error) {
-            // console.log(error);
+            console.log(error);
             isLogin = false;
         });
 
         // console.log(isLogin)
         if(isLogin){
             sessionStorage.setItem('loginStatus', true);
+            sessionStorage.setItem('loginId', inputId);
+            sessionStorage.setItem('loginPw', inputPw);
             this.setState({
-                loginStatus: true
+                loginStatus: true,
+                loginId: inputId,
+                loginPw: inputPw
             });
         }
     }

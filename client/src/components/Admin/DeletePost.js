@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from 'axios';
+
+import * as service from '../../services/post';
 
 import { Grid, Row, Col, ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
 
@@ -15,7 +18,8 @@ class Post extends React.Component {
         }
 
         this.close = this.close.bind(this);
-        //this.detail = this.detail.bind(this);
+        this.detail = this.detail.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -42,6 +46,29 @@ class Post extends React.Component {
         // console.log('clicked ' + idx);
     }
 
+    delete = async (postId) => {
+        var loginId = sessionStorage.getItem('loginId');
+        var loginPw = sessionStorage.getItem('loginPw');
+
+        await axios.post('http://127.0.0.1:8000/delete/', {
+            postId: postId,
+            user: loginId,
+            password: loginPw
+        })
+        .then(function (response) {
+            // console.log(response.data);
+            if(response.data == 'True'){
+                this.forceUpdate();
+            } else {
+                console.log('Error');
+                alert('Error');
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     modalOpen() {
         this.setState({
             showModal: true,
@@ -52,17 +79,19 @@ class Post extends React.Component {
     render() {
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
-        const clickedId = this.state.clickedId;
 
         const listInstance = [];
         for(var i=0; i<postCount; i++) {
             if(postInfo[i] !== undefined){
                 listInstance.push(                    
-                    <ListGroupItem key={postInfo[i].id} onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>{postInfo[i].title}</ListGroupItem>
+                    <ListGroupItem key={postInfo[i].id} onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>
+                        {postInfo[i].title}
+                    </ListGroupItem>
                 );
             }
         }
 
+        const clickedId = this.state.clickedId;
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
 
@@ -76,6 +105,7 @@ class Post extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
+                    <Button bsClass="btn btn-danger pull-right" onClick={ this.delete.bind(this, clickedId) }>Delete</Button>
                 </Modal.Footer>
             </Modal>
         );

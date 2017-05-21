@@ -8,13 +8,16 @@ export function getPost() {
     return axios.get('http://127.0.0.1:8000/posting/');
 }
 
-// axios.get('http://127.0.0.1:8000/posting/1/', {
-//     headers: { Authorization: 'Basic YWRtaW46YXNkZjEyMzQ=' }
-// })
-// .then(function (response) {
-//     console.log(response);
-//     console.log(response.data);
-// })
-// .catch(function (error) {
-//     console.log(error);
-// });
+// export function deletePost(postId, user, password) {
+//     return axios.post('http://127.0.0.1:8000/delete/', {
+//         postId: postId,
+//         user: user,
+//         password: password
+//     })
+//     .then(function (response) {
+//         // console.log(response.data);
+//     })
+//     .catch(function (error) {
+//         // console.log(error);
+//     });
+// }

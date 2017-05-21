@@ -70,8 +70,13 @@ def uploadPost(request):
 @csrf_exempt
 def deletePost(request):
     # userInfo = User.objects.get(username=request.POST['user'])
-    username = request.POST['user']
-    password = request.POST['password']
+    # username = request.POST['user']
+    # password = request.POST['password']
+
+    data = json.loads(request.body)
+    postId = data['postId']
+    username = data['user']
+    password = data['password']
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
@@ -86,7 +91,7 @@ def deletePost(request):
     log = ''
 
     try:
-        row = Posting.objects.get(id=request.POST['id'])
+        row = Posting.objects.get(id=postId)
     except Posting.DoesNotExist:
         print("Delete Post Request : [Failed]No Posting matches the given query.")
         return HttpResponse(result)
@@ -94,7 +99,7 @@ def deletePost(request):
     if row != None:
         log += 'Delete Post Request : post ' + str(row.id) + ' delete success'
         print(log)
-        row.delete()
+        # row.delete()
         result = True
     else:
         print("Delete Post Request : Delete error")
@@ -103,7 +108,7 @@ def deletePost(request):
 
 @csrf_exempt
 def login(request):
-    print(json.loads(request.body))
+    # print(json.loads(request.body))
     print('Admin Login Request...')
 
     # username = request.POST.get('user', False)
