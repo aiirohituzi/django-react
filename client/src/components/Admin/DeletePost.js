@@ -3,9 +3,9 @@ import axios from 'axios';
 
 import * as service from '../../services/post';
 
-import { Grid, Row, Col, ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
 
-class Post extends React.Component {
+class DeletePost extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -132,4 +132,4 @@ class Post extends React.Component {
     }
 }
  
-export default Post;
+export default DeletePost;

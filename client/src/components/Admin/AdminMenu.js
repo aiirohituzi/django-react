@@ -1,5 +1,6 @@
 import React from 'react';
 import * as service from '../../services/post';
+import UploadPost from './UploadPost';
 import DeletePost from './DeletePost';
 import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
 
@@ -65,7 +66,7 @@ class AdminMenu extends React.Component {
                 <Col sm={8}>
                     <Tab.Content animation>
                     <Tab.Pane eventKey="first">
-                        aa
+                        <UploadPost />
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
                         <DeletePost
