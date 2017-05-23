@@ -99,7 +99,7 @@ def deletePost(request):
     if row != None:
         log += 'Delete Post Request : post ' + str(row.id) + ' delete success'
         print(log)
-        # row.delete()
+        row.delete()
         result = True
     else:
         print("Delete Post Request : Delete error")

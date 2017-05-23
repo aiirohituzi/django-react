@@ -12,9 +12,10 @@ class Post extends React.Component {
             postInfo: null,
             postCount: null,
             showModal: false,
-            clickedId: 1,
+            clickedId: null,
             clickedTitle: null,
             clickedContent: null,
+            clickedListId: null
         }
 
         this.close = this.close.bind(this);
@@ -36,19 +37,21 @@ class Post extends React.Component {
         this.setState({ showModal: false });
     }
 
-    detail = async (id, title, content) => {
+    detail = async (id, title, content, listId) => {
         await this.setState({
             clickedId: id,
             clickedTitle: title,
             clickedContent: content,
+            clickedListId: listId
         });
         this.modalOpen();
         // console.log('clicked ' + idx);
     }
 
-    delete = async (postId) => {
+    delete = async (postId, listId) => {
         var loginId = sessionStorage.getItem('loginId');
         var loginPw = sessionStorage.getItem('loginPw');
+        var postInfo = this.state.postInfo;
 
         await axios.post('http://127.0.0.1:8000/delete/', {
             postId: postId,
@@ -58,7 +61,9 @@ class Post extends React.Component {
         .then(function (response) {
             // console.log(response.data);
             if(response.data == 'True'){
-                this.forceUpdate();
+                // console.log(response.data);
+                // console.log(postInfo);
+                delete postInfo[listId];
             } else {
                 console.log('Error');
                 alert('Error');
@@ -67,6 +72,10 @@ class Post extends React.Component {
         .catch(function (error) {
             console.log(error);
         });
+        // console.log(postInfo);
+        
+        this.close();
+        this.forceUpdate();
     }
 
     modalOpen() {
@@ -84,7 +93,7 @@ class Post extends React.Component {
         for(var i=0; i<postCount; i++) {
             if(postInfo[i] !== undefined){
                 listInstance.push(                    
-                    <ListGroupItem key={postInfo[i].id} onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>
+                    <ListGroupItem key={postInfo[i].id} onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content, i) }>
                         {postInfo[i].title}
                     </ListGroupItem>
                 );
@@ -94,6 +103,7 @@ class Post extends React.Component {
         const clickedId = this.state.clickedId;
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
+        const clickedListId = this.state.clickedListId;
 
         const modalInstance = (
             <Modal show={this.state.showModal} onHide={this.close}>
@@ -105,7 +115,7 @@ class Post extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
-                    <Button bsClass="btn btn-danger pull-right" onClick={ this.delete.bind(this, clickedId) }>Delete</Button>
+                    <Button bsClass="btn btn-danger pull-right" onClick={ this.delete.bind(this, clickedId, clickedListId) }>Delete</Button>
                 </Modal.Footer>
             </Modal>
         );
