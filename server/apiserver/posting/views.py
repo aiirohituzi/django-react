@@ -23,6 +23,8 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 
+from django.http import QueryDict
+
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
     queryset = Posting.objects.all().order_by('-id')
@@ -48,10 +50,32 @@ def api_root(request, format=None):
 def uploadPost(request):
     result = False
 
-    form = PostForm(request.POST)
-    row = models.User.objects.get(username=request.POST['user'])
+    data = json.loads(request.body)
+    username = data['user']
+    password = data['password']
+    title = data['title']
+    content = data['content']
 
-    # print(row.username)
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+
+    dict = {'user': username, 'password': password, 'title': title, 'content': content}
+    qdict = QueryDict('', mutable=True)
+    qdict.update(dict)
+
+    # print(request.POST)
+    print(qdict)
+
+    # form = PostForm(request.POST)
+    form = PostForm(qdict)
+    # row = models.User.objects.get(username=request.POST['user'])
+    row = models.User.objects.get(username=username)
+
+    if not login_valid and pwd_valid:
+        return HttpResponse(False)
+
+    print(row.username)
+    print(form)
 
     if form.is_valid():
         obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false

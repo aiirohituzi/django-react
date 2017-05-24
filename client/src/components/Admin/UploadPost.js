@@ -6,6 +6,39 @@ import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button } from 're
 class UploadPost extends React.Component {
     constructor(props) {
         super(props);
+
+        
+        this.upload = this.upload.bind(this);
+    }
+
+    upload = async () => {
+        var loginId = sessionStorage.getItem('loginId');
+        var loginPw = sessionStorage.getItem('loginPw');
+
+        var title = document.getElementById('formControlsTitle').value
+        var content = document.getElementById('formControlsContent').value
+
+        await axios.post('http://127.0.0.1:8000/upload/', {
+            user: loginId,
+            password: loginPw,
+            title: title,
+            content: content,
+        })
+        .then(function (response) {
+            // console.log(response.data);
+            if(response.data == 'True'){
+                // console.log(response.data);
+                alert('Upload success');
+            } else {
+                console.log('Error');
+                alert('Error');
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        this.forceUpdate();
     }
 
     render() {
@@ -21,7 +54,7 @@ class UploadPost extends React.Component {
                             <ControlLabel>Content</ControlLabel>
                             <FormControl componentClass="textarea" placeholder="Content" style={{ height: 200 }} />
                         </FormGroup>
-                        <Button bsClass="btn btn-primary pull-right">Upload</Button>
+                        <Button bsClass="btn btn-primary pull-right" onClick={ this.upload.bind(this) }>Upload</Button>
                     </Col>
                 </Row>
             </Grid>
