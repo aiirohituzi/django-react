@@ -1,7 +1,7 @@
 import React from 'react';
 import * as service from '../../services/post';
 import UploadPost from './UploadPost';
-import DeletePost from './DeletePost';
+import UpDelPost from './UpDelPost';
 import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
 
 class AdminMenu extends React.Component {
@@ -59,7 +59,7 @@ class AdminMenu extends React.Component {
                         게시글 업로드
                     </NavItem>
                     <NavItem eventKey="second">
-                        게시글 삭제
+                        게시글 수정 및 삭제
                     </NavItem>
                     </Nav>
                 </Col>
@@ -69,7 +69,7 @@ class AdminMenu extends React.Component {
                         <UploadPost />
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
-                        <DeletePost
+                        <UpDelPost
                             postCount={ postCount }
                             postInfo={ postInfo }
                         />
