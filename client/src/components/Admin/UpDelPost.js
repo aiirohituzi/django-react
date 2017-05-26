@@ -25,6 +25,7 @@ class UpDelPost extends React.Component {
         this.close = this.close.bind(this);
         this.detail = this.detail.bind(this);
         this.delete = this.delete.bind(this);
+        this.updateToggle = this.updateToggle.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -38,7 +39,10 @@ class UpDelPost extends React.Component {
     }
 
     close() {
-        this.setState({ showModal: false });
+        this.setState({
+            showModal: false,
+            update: false
+        });
     }
 
     detail = async (id, title, content, listId) => {
@@ -52,15 +56,58 @@ class UpDelPost extends React.Component {
         // console.log('clicked ' + idx);
     }
 
-    update(state) {
+    update = async (state, postId, listId) => {
+        this.updateToggle(state);
+        if(state){            
+            var title = document.getElementById('formTitle').value;
+            var content = document.getElementById('formContent').value;
+            var loginId = sessionStorage.getItem('loginId');
+            var loginPw = sessionStorage.getItem('loginPw');
+            var postInfo = this.state.postInfo;
+            var clickedTitle = this.state.clickedTitle;
+            var clickedContent = this.state.clickedContent;
+
+            // console.log(title);
+            // console.log(content);
+            // console.log(postId);
+
+            await axios.post('http://127.0.0.1:8000/update/', {
+                postId: postId,
+                title: title,
+                content: content,
+                user: loginId,
+                password: loginPw
+            })
+            .then(function (response) {
+                if(response.data == 'True'){
+                    postInfo[listId].title = title;
+                    postInfo[listId].content = content;
+                    clickedTitle = title;
+                    clickedContent = content;
+                } else {
+                    console.log('Error');
+                    alert('Error');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+            this.setState({
+                postInfo: postInfo,
+                clickedTitle: clickedTitle,
+                clickedContent: clickedContent
+            });
+        }
+
+        this.updateToggle(state);
+        this.forceUpdate();
+    }
+
+    updateToggle(state) {
         this.setState({
             update: !state
         });
-
-        if(state){
-            console.log(document.getElementById('formTitle').value);
-            console.log(document.getElementById('formContent').value);
-        }
     }
 
     delete = async (postId, listId) => {
@@ -122,8 +169,8 @@ class UpDelPost extends React.Component {
 
         const update = this.state.update;
 
-        const modalInstance = (
-            <Modal show={ this.state.showModal } onHide={ this.close }>
+        const modalInstance = [];
+        modalInstance.push(
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <TitleForm
@@ -132,19 +179,32 @@ class UpDelPost extends React.Component {
                         />
                     </Modal.Title>
                 </Modal.Header>
+        );
+        modalInstance.push(
                 <Modal.Body>
                     <ContentForm
                         update={ update }
                         content={ clickedContent }
                     />
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button bsClass="btn" onClick={ this.close }>Close</Button>
-                    <Button bsClass="btn" onClick={ this.update.bind(this, update) }>Update</Button>
-                    <Button bsClass="btn btn-danger" onClick={ this.delete.bind(this, clickedId, clickedListId) }>Delete</Button>
-                </Modal.Footer>
-            </Modal>
         );
+        if(!update){
+            modalInstance.push(
+                <Modal.Footer>
+                    <Button bsClass="btn" onClick={ this.close }>닫기</Button>
+                    <Button bsClass="btn" onClick={ this.update.bind(this, update, clickedId, clickedListId) }>수정</Button>
+                    <Button bsClass="btn btn-danger" onClick={ this.delete.bind(this, clickedId, clickedListId) }>삭제</Button>
+                </Modal.Footer>
+            );
+        } else {
+            modalInstance.push(
+                <Modal.Footer>
+                    <Button bsClass="btn" onClick={ this.close }>닫기</Button>
+                    <Button bsClass="btn" onClick={ this.update.bind(this, update, clickedId, clickedListId) }>수정</Button>
+                    <Button bsClass="btn" onClick={ this.updateToggle.bind(this, update) }>취소</Button>
+                </Modal.Footer>
+            );
+        }
  
         // show nothing when data is not loaded
         if(postInfo === null) return null;
@@ -152,7 +212,9 @@ class UpDelPost extends React.Component {
         return (
             <ListGroup>
                 { listInstance }
-                { modalInstance }
+                <Modal show={ this.state.showModal } onHide={ this.close }>
+                    { modalInstance }
+                </Modal>
             </ListGroup>
         );
     }

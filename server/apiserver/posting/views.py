@@ -46,6 +46,8 @@ def api_root(request, format=None):
         'posting': reverse('posting-list', request=request, format=format)
     })
 
+
+
 @csrf_exempt
 def uploadPost(request):
     result = False
@@ -64,7 +66,7 @@ def uploadPost(request):
     qdict.update(dict)
 
     # print(request.POST)
-    print(qdict)
+    # print(qdict)
 
     # form = PostForm(request.POST)
     form = PostForm(qdict)
@@ -74,8 +76,8 @@ def uploadPost(request):
     if not login_valid and pwd_valid:
         return HttpResponse(False)
 
-    print(row.username)
-    print(form)
+    # print(row.username)
+    # print(form)
 
     if form.is_valid():
         obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
@@ -91,6 +93,49 @@ def uploadPost(request):
     # print(json.dumps(request.POST))
     return HttpResponse(result)
 
+
+
+@csrf_exempt
+def updatePost(request):
+
+    data = json.loads(request.body)
+    postId = data['postId']
+    title = data['title']
+    content = data['content']
+    username = data['user']
+    password = data['password']
+
+    print(postId)
+
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+
+    if not login_valid and pwd_valid:
+        return HttpResponse(False)
+
+    result = False
+    log = ''
+
+    try:
+        row = Posting.objects.get(id=postId)
+    except Posting.DoesNotExist:
+        print("Update Post Request : [Failed]No Posting matches the given query.")
+        return HttpResponse(result)
+
+    if row != None:
+        row.title = title
+        row.content = content
+        row.save()
+        log += 'Update Post Request : post ' + str(row.id) + ' Update success'
+        print(log)
+        result = True
+    else:
+        print("Update Post Request : Update error")
+
+    return HttpResponse(result)
+
+
+
 @csrf_exempt
 def deletePost(request):
     # userInfo = User.objects.get(username=request.POST['user'])
@@ -101,6 +146,8 @@ def deletePost(request):
     postId = data['postId']
     username = data['user']
     password = data['password']
+
+    print(postId)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
@@ -129,6 +176,8 @@ def deletePost(request):
         print("Delete Post Request : Delete error")
 
     return HttpResponse(result)
+
+
 
 @csrf_exempt
 def login(request):

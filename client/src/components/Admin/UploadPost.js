@@ -29,6 +29,8 @@ class UploadPost extends React.Component {
             if(response.data == 'True'){
                 // console.log(response.data);
                 alert('Upload success');
+                document.getElementById('formControlsTitle').value = '';
+                document.getElementById('formControlsContent').value = '';
             } else {
                 console.log('Error');
                 alert('Error');
@@ -47,12 +49,12 @@ class UploadPost extends React.Component {
                 <Row>
                     <Col xs={12} sm={8} md={8}>
                         <FormGroup controlId="formControlsTitle">
-                            <ControlLabel>Title</ControlLabel>
-                            <FormControl type="text" placeholder="Enter title" />
+                            <ControlLabel>제목</ControlLabel>
+                            <FormControl type="text" placeholder="글 제목을 입력해주세요." />
                         </FormGroup>
                         <FormGroup controlId="formControlsContent">
-                            <ControlLabel>Content</ControlLabel>
-                            <FormControl componentClass="textarea" placeholder="Content" style={{ height: 200 }} />
+                            <ControlLabel>글 내용</ControlLabel>
+                            <FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} />
                         </FormGroup>
                         <Button bsClass="btn btn-primary pull-right" onClick={ this.upload.bind(this) }>Upload</Button>
                     </Col>

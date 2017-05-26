@@ -21,6 +21,12 @@ class ContentForm extends React.Component {
         })
     }
 
+    handleChange(e) {
+        let nextState = {};
+        nextState[e.target.title] = e.target.value;
+        this.setState(nextState)
+    }
+
     render() {
         const update = this.state.update;
         const content = this.state.content;
@@ -29,7 +35,8 @@ class ContentForm extends React.Component {
         if(update){
             contentInstance.push(
                 <FormGroup controlId="formContent">
-                    <FormControl componentClass="textarea" placeholder="Content" style={{ height: 200 }} value={ content } />
+                    <FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} value={ content } onChange={ this.handleChange } />
+                    {/*<FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} />*/}
                 </FormGroup>
             );
         } else {

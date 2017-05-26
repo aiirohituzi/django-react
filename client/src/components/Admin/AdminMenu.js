@@ -15,6 +15,7 @@ class AdminMenu extends React.Component {
         };
 
         this.handleMore = this.handleMore.bind(this);
+        // this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +46,15 @@ class AdminMenu extends React.Component {
         }
     }
 
+    // handleSelect(e) {
+    //     console.log('asdf');
+    //     switch(e){
+    //         case second:
+    //             this.fetchPostInfo();
+    //             break;
+    //     }
+    // }
+
     render() {        
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
@@ -58,7 +68,7 @@ class AdminMenu extends React.Component {
                     <NavItem eventKey="first">
                         게시글 업로드
                     </NavItem>
-                    <NavItem eventKey="second">
+                    <NavItem eventKey="second" >
                         게시글 수정 및 삭제
                     </NavItem>
                     </Nav>
