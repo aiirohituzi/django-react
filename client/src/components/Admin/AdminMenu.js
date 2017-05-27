@@ -1,7 +1,7 @@
 import React from 'react';
 import * as service from '../../services/post';
 import UploadPost from './UploadPost';
-import UpDelPost from './UpDelPost';
+import UploadDeletePost from './UploadDeletePost';
 import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
 
 class AdminMenu extends React.Component {
@@ -79,7 +79,7 @@ class AdminMenu extends React.Component {
                         <UploadPost />
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
-                        <UpDelPost
+                        <UploadDeletePost
                             postCount={ postCount }
                             postInfo={ postInfo }
                         />

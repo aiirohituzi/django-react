@@ -8,7 +8,7 @@ import * as service from '../../services/post';
 
 import { ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
 
-class UpDelPost extends React.Component {
+class UploadDeletePost extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -148,8 +148,12 @@ class UpDelPost extends React.Component {
     }
     
     render() {
-        const postInfo = this.state.postInfo;
+        let postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
+
+        if(postInfo == null){           // warning disable
+           postInfo = [{'title': 'temp'},];
+        }
 
         const listInstance = [];
         for(var i=0; i<postCount; i++) {
@@ -220,4 +224,4 @@ class UpDelPost extends React.Component {
     }
 }
  
-export default UpDelPost;
+export default UploadDeletePost;

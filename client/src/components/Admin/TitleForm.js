@@ -10,8 +10,6 @@ class TitleForm extends React.Component {
             update: null,
             title: null,
         }
-        
-        // this.handleChange = this.handleChange.bind(parent);
     }
 
     componentWillReceiveProps (nextProps) {
