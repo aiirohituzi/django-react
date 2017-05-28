@@ -17,6 +17,7 @@ class Admin extends React.Component {
 
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -66,6 +67,12 @@ class Admin extends React.Component {
             loginStatus: false
         });
     }
+
+    handleKeyPress(e) {
+        if(e.charCode===13) {
+            this.login();
+        }
+    }
     
     render() {
         const loginStatus = this.state.loginStatus;
@@ -74,8 +81,20 @@ class Admin extends React.Component {
         if(loginStatus) {
             loginInstance.push(
                 <div key='afterLogin'>
-                    <Button onClick={this.logout}>Sing out</Button>
-                    <AdminMenu/>
+                    <Grid>
+                    <Row>
+                        <Col xs={8}>
+                            <h3>관리자 페이지</h3>
+                        </Col>
+                        <Col xs={4}>
+                            <Button bsClass="btn btn-default pull-right" onClick={this.logout}>Sign out</Button>
+                        </Col>
+                    </Row>
+                    <hr/>
+                    <Row>
+                        <AdminMenu/>
+                    </Row>
+                    </Grid>
                 </div>
             );
         }else {
@@ -95,7 +114,7 @@ class Admin extends React.Component {
                             Password
                         </Col>
                         <Col sm={10}>
-                            <FormControl type="password" placeholder="Password" />
+                            <FormControl type="password" placeholder="Password" onKeyPress={this.handleKeyPress}/>
                         </Col>
                     </FormGroup>
 

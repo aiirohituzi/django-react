@@ -26,6 +26,7 @@ class TitleForm extends React.Component {
         let nextState = {};
         nextState[e.target.title] = e.target.value;
         this.setState(nextState)
+        // this.setState({[e.target.title]: e.target.value});
     }
 
     render() {
