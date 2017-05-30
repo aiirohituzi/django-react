@@ -212,3 +212,39 @@ def login(request):
     else:
         print('Success Login')
         return HttpResponse(True)
+
+
+
+@csrf_exempt
+def uploadImage():
+
+    result = False
+
+    data = json.loads(request.body)
+    username = data['user']
+    password = data['password']
+    # 추가 필요 : image 파일 관련 정보
+
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+
+    dict = {'user': username, 'password': password, }       # 추가 필요
+    qdict = QueryDict('', mutable=True)
+    qdict.update(dict)
+
+    form = PostForm(qdict)      # image Form으로 교체 필요
+    row = models.User.objects.get(username=username)        # 게시물에 종속시켜야하니 그쪽 관련으로 변경 필요
+
+    if not login_valid and pwd_valid:
+        return HttpResponse(False)
+
+    # if form.is_valid():
+    #     obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+    #     obj.owner_id = row.id
+    #     obj.save()      # obj.save(commit=True) 와 동일
+    #     print("Create Post Request : Post success")
+    #     result = True
+    # else:
+    #     print("Create Post Request : Post error")
+
+    return HttpResponse(result)

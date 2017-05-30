@@ -27,8 +27,6 @@ export default class Navigation extends React.Component {
     handleSelectRight(e) {
         switch(e){
             case 1:
-                break;
-            case 2:
                 location.href = './Admin';
                 break;
         }
@@ -47,17 +45,9 @@ export default class Navigation extends React.Component {
                     <Nav>
                         <NavItem eventKey={1} onSelect={this.handleSelect}>게시물</NavItem>
                         <NavItem eventKey={2} onSelect={this.handleSelect}>Link2</NavItem>
-                        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                            <MenuItem eventKey={3.1}>Action</MenuItem>
-                            <MenuItem eventKey={3.2}>Another action</MenuItem>
-                            <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                            <MenuItem divider />
-                            <MenuItem eventKey={3.3}>Separated link</MenuItem>
-                        </NavDropdown>
                     </Nav>
                     <Nav pullRight>
-                        <NavItem eventKey={1} href="#">Link Right</NavItem>
-                        <NavItem eventKey={2} onSelect={this.handleSelectRight}><img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/gear-1119298_1920.png")} style={{width: 20}}/></NavItem>
+                        <NavItem eventKey={1} onSelect={this.handleSelectRight}><img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/gear-1119298_1920.png")} style={{width: 20}}/>&nbsp;관리</NavItem>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

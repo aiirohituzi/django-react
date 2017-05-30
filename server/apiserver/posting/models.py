@@ -10,3 +10,22 @@ class Posting(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+
+class Images(models.Model):
+    image = models.ImageField(upload_to='%Y/%m/%d/orig')                # '원본 사진 파일'
+    filtered_image = models.ImageField(upload_to='%Y/%m/%d/filtered')   #'필터 적용된 사진 파일'
+    created_at = models.DateTimeField(auto_now_add=True)                #'생성일시'
+
+    class Meta:
+        ordering = ('-created_at', '-pk', )
+
+    # def delete(self, *args, **kwargs):
+    #     self.image.delete()
+    #     self.filtered_image.delete()
+    #     super(Photo, self).delete(*args, **kwargs)
+
+    # def get_absolute_url(self):
+    #     url = reverse_lazy('detail', kwargs={'pk': self.pk})
+    #     return url
