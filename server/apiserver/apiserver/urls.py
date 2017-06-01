@@ -24,6 +24,7 @@ from rest_framework.routers import DefaultRouter
 from posting.views import uploadPost
 from posting.views import updatePost
 from posting.views import deletePost
+from posting.views import uploadImage
 
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
@@ -36,5 +37,6 @@ urlpatterns = [
     url(r'^upload/$', uploadPost, name='upload'),
     url(r'^update/$', updatePost, name='update'),
     url(r'^delete/$', deletePost, name='delete'),
+    url(r'^upImage/$', uploadImage, name='upImage'),
     url(r'^login/$', views.login, name='login')
 ]
