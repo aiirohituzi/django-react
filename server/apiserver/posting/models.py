@@ -5,7 +5,6 @@ class Posting(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField()
-    image = models.TextField(default=None, blank=True, null=True)
     
     owner = models.ForeignKey('auth.User', related_name='posting')  
 
@@ -18,6 +17,7 @@ class Images(models.Model):
     image = models.ImageField(upload_to='image/%Y/%m/%d/orig')              # '원본 사진 파일'
     created_at = models.DateTimeField(auto_now_add=True)                    # '생성일시'
     postId = models.ForeignKey(Posting, related_name='imageRelate', default='0')
+    # 당장은 한개의 image만 post와 연결되지만 여러개의 image가 하나의 post와 연결 될 경우를 생각해서 image에 foreignkey를 등록
 
     class Meta:
         ordering = ('-created_at', '-pk', )

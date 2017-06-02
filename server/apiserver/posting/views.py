@@ -89,7 +89,7 @@ def uploadPost(request):
     if postForm.is_valid():
         post_obj = postForm.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
         post_obj.owner_id = user_row.id
-        # post_obj.save()      # obj.save(commit=True) 와 동일
+        post_obj.save()      # obj.save(commit=True) 와 동일
 
         if(fileCheck):
             post_row = Posting.objects.all().last()
@@ -106,7 +106,7 @@ def uploadPost(request):
             # print(imageForm.is_valid())
 
             img_obj = imageForm.save(commit=False)
-            # img_obj.save()
+            img_obj.save()
             print(" - Image included")
 
 
