@@ -7,6 +7,7 @@ class Link2 extends React.Component{
 
         this.changeFile = this.changeFile.bind(this);
         this.importFile = this.importFile.bind(this);
+        this.getImage = this.getImage.bind(this);
     }
 
     changeFile(e) {
@@ -46,12 +47,31 @@ class Link2 extends React.Component{
         });
     }
 
+    getImage() {
+        var data = new FormData();
+        data.append('postId', '24');
+
+        const config = {
+            headers: { 'content-type': 'application/json' }
+        }
+
+        axios.post('http://127.0.0.1:8000/images/', data, config)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
     render() {
         return(
             <div>
                 임시 작업용 페이지
                 <input type="file" onChange={this.changeFile}/>
                 <button onClick={this.importFile}>Import</button>
+                <hr />
+                <button onClick={this.getImage}>getImageTest</button>
             </div>
         );
     }

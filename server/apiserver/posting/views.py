@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from posting.models import Posting
+from posting.models import Images
 from posting.serializers import PostingSerializer
 from posting.serializers import UserSerializer
 
@@ -40,12 +41,23 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
 
 
+
 @api_view(('GET',))
 def api_root(request, format=None):  
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'posting': reverse('posting-list', request=request, format=format)
     })
+
+
+
+@csrf_exempt
+def getImageByPostId(request):
+    postId = request.POST['postId']
+    # print(postId)
+    img = Images.objects.filter(postId_id=postId)
+    print(img[0].image)
+    return HttpResponse(img)
 
 
 
