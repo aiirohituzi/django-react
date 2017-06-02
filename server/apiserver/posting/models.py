@@ -5,6 +5,7 @@ class Posting(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
     content = models.TextField()
+    image = models.TextField(default=None, blank=True, null=True)
     
     owner = models.ForeignKey('auth.User', related_name='posting')  
 
@@ -14,8 +15,9 @@ class Posting(models.Model):
 
 
 class Images(models.Model):
-    image = models.ImageField(upload_to='image/%Y/%m/%d/orig')                # '원본 사진 파일'
-    created_at = models.DateTimeField(auto_now_add=True)                #'생성일시'
+    image = models.ImageField(upload_to='image/%Y/%m/%d/orig')              # '원본 사진 파일'
+    created_at = models.DateTimeField(auto_now_add=True)                    # '생성일시'
+    postId = models.ForeignKey(Posting, related_name='imageRelate', default='0')
 
     class Meta:
         ordering = ('-created_at', '-pk', )

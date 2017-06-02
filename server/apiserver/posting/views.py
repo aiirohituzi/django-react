@@ -53,39 +53,66 @@ def api_root(request, format=None):
 def uploadPost(request):
     result = False
 
-    data = json.loads(request.body)
-    username = data['user']
-    password = data['password']
-    title = data['title']
-    content = data['content']
+    # data = json.loads(request.body)
+    # username = data['user']
+    username = request.POST['user']
+    password = request.POST['password']
+    title = request.POST['title']
+    content = request.POST['content']
+    fileCheck = request.FILES.get('image', False)
+
+    print(fileCheck)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
 
-    dict = {'user': username, 'password': password, 'title': title, 'content': content}
-    qdict = QueryDict('', mutable=True)
-    qdict.update(dict)
+    # dict = {'user': username, 'password': password, 'title': title, 'content': content}
+    # qdict = QueryDict('', mutable=True)
+    # qdict.update(dict)
 
     # print(request.POST)
     # print(qdict)
 
-    # form = PostForm(request.POST)
-    form = PostForm(qdict)
-    # row = models.User.objects.get(username=request.POST['user'])
-    row = models.User.objects.get(username=username)
+    postForm = PostForm(request.POST)
+
+    # form = PostForm(qdict)
+    user_row = models.User.objects.get(username=request.POST['user'])
+    # row = models.User.objects.get(username=username)
 
     if not login_valid and pwd_valid:
         return HttpResponse(False)
 
-    # print(row.username)
+    # print(user_row.username)
     # print(form)
 
-    if form.is_valid():
-        obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
-        obj.owner_id = row.id
-        obj.save()      # obj.save(commit=True) 와 동일
+
+    if postForm.is_valid():
+        post_obj = postForm.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+        post_obj.owner_id = user_row.id
+        # post_obj.save()      # obj.save(commit=True) 와 동일
+
+        if(fileCheck):
+            post_row = Posting.objects.all().last()
+
+            dict = {'postId': post_row.id,}
+            qdict = QueryDict('', mutable=True)
+            qdict.update(dict)
+
+            # print(qdict)
+            # print('------------------------------------')
+            # print(request.POST)
+
+            imageForm = ImageForm(qdict, request.FILES)
+            # print(imageForm.is_valid())
+
+            img_obj = imageForm.save(commit=False)
+            # img_obj.save()
+            print(" - Image included")
+
+
         print("Create Post Request : Post success")
         result = True
+        
     else:
         print("Create Post Request : Post error")
 
@@ -241,7 +268,7 @@ def uploadImage(request):
     if form.is_valid():
         obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
         # obj.owner_id = row.id
-        obj.save()      # obj.save(commit=True) 와 동일
+        # obj.save()      # obj.save(commit=True) 와 동일
         print("Image Upload Request : Upload success")
         result = True
     else:

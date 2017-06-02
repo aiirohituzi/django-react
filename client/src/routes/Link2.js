@@ -11,7 +11,7 @@ class Link2 extends React.Component{
 
     changeFile(e) {
         console.log(e.target.files[0]);
-        this.setState({csvFile: e.target.files[0]});
+        this.setState({imageFile: e.target.files[0]});
     }
 
     importFile() {
@@ -19,9 +19,10 @@ class Link2 extends React.Component{
         var loginId = sessionStorage.getItem('loginId');
         var loginPw = sessionStorage.getItem('loginPw');
 
-        data.append('image', this.state.csvFile);
+        data.append('image', this.state.imageFile);
         data.append('user', loginId);
         data.append('password', loginPw);
+        data.append('postId', '1');
 
         // $.ajax({
         //     type: "POST",
