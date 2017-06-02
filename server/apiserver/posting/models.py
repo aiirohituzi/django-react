@@ -14,8 +14,7 @@ class Posting(models.Model):
 
 
 class Images(models.Model):
-    image = models.ImageField(upload_to='%Y/%m/%d/orig')                # '원본 사진 파일'
-    filtered_image = models.ImageField(upload_to='%Y/%m/%d/filtered')   #'필터 적용된 사진 파일'
+    image = models.ImageField(upload_to='image/%Y/%m/%d/orig')                # '원본 사진 파일'
     created_at = models.DateTimeField(auto_now_add=True)                #'생성일시'
 
     class Meta:

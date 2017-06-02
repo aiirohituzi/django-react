@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from posting.forms import PostForm
 import json
+from posting.forms import ImageForm
 
 from django.contrib.auth import models
 
@@ -220,33 +221,30 @@ def uploadImage(request):
 
     result = False
 
-    print(request.FILES)
-    # data = json.loads(request.body)
-    # username = data['user']
-    # password = data['password']
-    # fileInfo = data['data']
-    # print(fileInfo)
+    # print(request.FILES)
+    # print(request.POST)
 
-    # login_valid = (settings.ADMIN_LOGIN == username)
-    # pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    fileInfo = request.FILES
+    username = request.POST['user']
+    password = request.POST['password']
 
-    # dict = {'user': username, 'password': password, }       # 추가 필요
-    # qdict = QueryDict('', mutable=True)
-    # qdict.update(dict)
+    login_valid = (settings.ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
 
-    # form = PostForm(qdict)      # image Form으로 교체 필요
+    form = ImageForm(request.POST, request.FILES)      # image Form으로 교체 필요
     # row = models.User.objects.get(username=username)        # 게시물에 종속시켜야하니 그쪽 관련으로 변경 필요
 
-    # if not login_valid and pwd_valid:
-    #     return HttpResponse(False)
+    if not login_valid and pwd_valid:
+        return HttpResponse(False)
 
-    # if form.is_valid():
-    #     obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
-    #     obj.owner_id = row.id
-    #     obj.save()      # obj.save(commit=True) 와 동일
-    #     print("Create Post Request : Post success")
-    #     result = True
-    # else:
-    #     print("Create Post Request : Post error")
+    print(form)
+    if form.is_valid():
+        obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+        # obj.owner_id = row.id
+        obj.save()      # obj.save(commit=True) 와 동일
+        print("Image Upload Request : Upload success")
+        result = True
+    else:
+        print("Image Upload Request : Upload error")
 
     return HttpResponse(result)

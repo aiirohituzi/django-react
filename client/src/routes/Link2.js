@@ -16,7 +16,13 @@ class Link2 extends React.Component{
 
     importFile() {
         var data = new FormData();
-        data.append('file', this.state.csvFile);
+        var loginId = sessionStorage.getItem('loginId');
+        var loginPw = sessionStorage.getItem('loginPw');
+
+        data.append('image', this.state.csvFile);
+        data.append('user', loginId);
+        data.append('password', loginPw);
+
         // $.ajax({
         //     type: "POST",
         //     url: "http://127.0.0.1:8000/upImage/",
