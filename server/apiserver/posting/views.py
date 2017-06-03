@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse
 from rest_framework import viewsets
 
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from posting.forms import PostForm
@@ -26,6 +27,9 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password
 
 from django.http import QueryDict
+
+from django.core.files import File
+import base64
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
@@ -56,8 +60,13 @@ def getImageByPostId(request):
     postId = request.POST['postId']
     # print(postId)
     img = Images.objects.filter(postId_id=postId)
-    print(img[0].image)
-    return HttpResponse(img)
+    # print(img[0].image)
+    f = open(str(img[0].image), 'rb')
+    image = File(f)
+    data = base64.b64encode(image.read())
+    f.close()
+    print(data)
+    return HttpResponse(data)
 
 
 
