@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import { Grid, Row, Col, Thumbnail, Button, Modal } from 'react-bootstrap';
 // import Grid from 'react-bootstrap/lib/Grid';
@@ -17,10 +18,12 @@ class Post extends React.Component {
             clickedId: 1,
             clickedTitle: null,
             clickedContent: null,
+            clickedImg: null,
         }
 
         this.close = this.close.bind(this);
         //this.detail = this.detail.bind(this);
+        this.getImage = this.getImage.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -38,6 +41,7 @@ class Post extends React.Component {
     }
 
     detail = async (id, title, content) => {
+        await this.getImage(id);
         await this.setState({
             clickedId: id,
             clickedTitle: title,
@@ -45,6 +49,35 @@ class Post extends React.Component {
         });
         this.modalOpen();
         // console.log('clicked ' + idx);
+    }
+
+    getImage = async (id) => {
+        var data = new FormData();
+        var img;
+        data.append('postId', id);
+
+        const config = {
+            headers: { 'content-type': 'application/json' }
+        }
+
+        await axios.post('http://127.0.0.1:8000/images/', data, config)
+        .then(function (response) {
+            console.log(response.data);
+            if(!(response.data == 'False')){
+                img = 'data:image/png;base64,' + response.data;
+                console.log('asdfdsaf')
+            } else {
+                img = null;
+                console.log('addddd')
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        this.setState({
+            clickedImg: img
+        });
     }
 
     modalOpen() {
@@ -81,6 +114,17 @@ class Post extends React.Component {
 
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
+        var clickedImg;
+        if(this.state.clickedImg == null){
+            clickedImg = ('');
+        }
+        else {
+            clickedImg = (
+                <div>
+                    <img src={this.state.clickedImg} style={{width: 200}}/>
+                </div>
+            )
+        }
 
         const modalInstance = (
             <Modal show={this.state.showModal} onHide={this.close}>
@@ -88,6 +132,7 @@ class Post extends React.Component {
                     <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    {clickedImg}
                     {clickedContent}
                 </Modal.Body>
                 <Modal.Footer>

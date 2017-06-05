@@ -30,6 +30,7 @@ from django.http import QueryDict
 
 from django.core.files import File
 import base64
+# import magic  # install failed
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
@@ -60,12 +61,15 @@ def getImageByPostId(request):
     postId = request.POST['postId']
     # print(postId)
     img = Images.objects.filter(postId_id=postId)
-    # print(img[0].image)
-    f = open(str(img[0].image), 'rb')
-    image = File(f)
-    data = base64.b64encode(image.read())
-    f.close()
-    print(data)
+    if(img):
+        f = open(str(img[0].image), 'rb')
+        image = File(f)
+        # print(magic.from_file(image))
+        data = base64.b64encode(image.read())
+        f.close()
+    else:
+        data = False
+    # print(data)
     return HttpResponse(data)
 
 
