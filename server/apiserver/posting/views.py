@@ -151,14 +151,20 @@ def uploadPost(request):
 @csrf_exempt
 def updatePost(request):
 
-    data = json.loads(request.body)
-    postId = data['postId']
-    title = data['title']
-    content = data['content']
-    username = data['user']
-    password = data['password']
+    # data = json.loads(request.body)
+    # postId = data['postId']
+    # title = data['title']
+    # content = data['content']
+    # username = data['user']
+    # password = data['password']
+    postId = request.POST['postId']
+    title = request.POST['title']
+    content = request.POST['content']
+    username = request.POST['user']
+    password = request.POST['password']
+    fileCheck = request.FILES.get('image', False)
 
-    print(postId)
+    # print(postId)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
@@ -179,6 +185,13 @@ def updatePost(request):
         row.title = title
         row.content = content
         row.save()
+
+        if(fileCheck):
+            img_row = Images.objects.get(postId_id=postId)
+            img_row.image = filecheck
+            img_row.save()
+            print(" - Image updated")
+
         log += 'Update Post Request : post ' + str(row.id) + ' Update success'
         print(log)
         result = True

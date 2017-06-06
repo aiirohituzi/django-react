@@ -8,7 +8,7 @@ import * as service from '../../services/post';
 
 import { ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
 
-class UploadDeletePost extends React.Component {
+class UpdateDeletePost extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -46,6 +46,7 @@ class UploadDeletePost extends React.Component {
     }
 
     detail = async (id, title, content, listId) => {
+        await this.getImage(id);
         await this.setState({
             clickedId: id,
             clickedTitle: title,
@@ -56,9 +57,38 @@ class UploadDeletePost extends React.Component {
         // console.log('clicked ' + idx);
     }
 
+    getImage = async (id) => {
+        var data = new FormData();
+        var img;
+        data.append('postId', id);
+
+        const config = {
+            headers: { 'content-type': 'application/json' }
+        }
+
+        await axios.post('http://127.0.0.1:8000/images/', data, config)
+        .then(function (response) {
+            // console.log(response);
+            if(!(response.data == 'False')){
+                img = 'data:image/png;base64,' + response.data;
+            } else {
+                img = null;
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        this.setState({
+            clickedImg: img
+        });
+    }
+
     update = async (state, postId, listId) => {
         this.updateToggle(state);
-        if(state){            
+        if(state){
+            var data = new FormData();
+
             var title = document.getElementById('formTitle').value;
             var content = document.getElementById('formContent').value;
             var loginId = sessionStorage.getItem('loginId');
@@ -71,13 +101,18 @@ class UploadDeletePost extends React.Component {
             // console.log(content);
             // console.log(postId);
 
-            await axios.post('http://127.0.0.1:8000/update/', {
-                postId: postId,
-                title: title,
-                content: content,
-                user: loginId,
-                password: loginPw
-            })
+            data.append('postId', postId);
+            data.append('user', loginId);
+            data.append('password', loginPw);
+            data.append('title', title);
+            data.append('content', content);
+            // data.append('image', image);
+
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+
+            await axios.post('http://127.0.0.1:8000/update/', data, config)
             .then(function (response) {
                 if(response.data == 'True'){
                     postInfo[listId].title = title;
@@ -170,6 +205,17 @@ class UploadDeletePost extends React.Component {
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
         const clickedListId = this.state.clickedListId;
+        var clickedImg;
+        if(this.state.clickedImg == null){
+            clickedImg = ('');
+        }
+        else {
+            clickedImg = (
+                <div>
+                    <img src={this.state.clickedImg} style={{width: 200}}/>
+                </div>
+            )
+        }
 
         const update = this.state.update;
 
@@ -186,6 +232,7 @@ class UploadDeletePost extends React.Component {
         );
         modalInstance.push(
                 <Modal.Body>
+                    {clickedImg}
                     <ContentForm
                         update={ update }
                         content={ clickedContent }
@@ -224,4 +271,4 @@ class UploadDeletePost extends React.Component {
     }
 }
  
-export default UploadDeletePost;
+export default UpdateDeletePost;

@@ -62,13 +62,11 @@ class Post extends React.Component {
 
         await axios.post('http://127.0.0.1:8000/images/', data, config)
         .then(function (response) {
-            console.log(response.data);
+            // console.log(response);
             if(!(response.data == 'False')){
                 img = 'data:image/png;base64,' + response.data;
-                console.log('asdfdsaf')
             } else {
                 img = null;
-                console.log('addddd')
             }
         })
         .catch(function (error) {
