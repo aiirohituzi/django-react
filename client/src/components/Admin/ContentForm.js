@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormGroup, FormControl } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, Checkbox } from 'react-bootstrap';
 
 class ContentForm extends React.Component {
     constructor(props) {
@@ -8,16 +8,21 @@ class ContentForm extends React.Component {
         this.state = {
             update: null,
             content: null,
+            image: null,
+            checkboxChecked: false,
         }
+
+        this.handleChangeCheckBox = this.handleChangeCheckBox.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
         
-        const { update, content } = nextProps;
+        const { update, content, image } = nextProps;
 
         this.setState({
             update,
-            content
+            content,
+            image
         })
     }
 
@@ -27,10 +32,17 @@ class ContentForm extends React.Component {
         this.setState(nextState)
     }
 
+    handleChangeCheckBox(e) {
+        this.setState({ checkboxChecked: e.target.checked });
+        console.log(this.state.checkboxChecked);
+    }
+
     render() {
         const update = this.state.update;
         const content = this.state.content;
+        const image = this.state.image;
         const contentInstance = [];
+        const imageInstance = [];
 
         if(update){
             contentInstance.push(
@@ -39,14 +51,32 @@ class ContentForm extends React.Component {
                     {/*<FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} />*/}
                 </FormGroup>
             );
+            imageInstance.push(
+                <div>
+                    <FormGroup>
+                        <Checkbox inline checked={this.state.checkboxChecked} onChange={this.handleChangeCheckBox} >
+                            1
+                        </Checkbox>
+                    </FormGroup>
+        
+                    <FormGroup controlId="formControlsImage">
+                        <ControlLabel>이미지 업로드</ControlLabel>
+                        <FormControl type="file" />
+                    </FormGroup>
+                </div>
+            );
         } else {
             contentInstance.push(
                 content
             )
+            imageInstance.push(
+                image
+            );
         }
 
         return (
             <div>
+                {imageInstance}
                 {contentInstance}
             </div>
         );

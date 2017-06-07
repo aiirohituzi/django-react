@@ -86,8 +86,12 @@ class UpdateDeletePost extends React.Component {
 
     update = async (state, postId, listId) => {
         this.updateToggle(state);
+        
         if(state){
             var data = new FormData();
+
+            var check = document.getElementById('formControlsCheck').value;
+            console.log(check);
 
             var title = document.getElementById('formTitle').value;
             var content = document.getElementById('formContent').value;
@@ -232,10 +236,10 @@ class UpdateDeletePost extends React.Component {
         );
         modalInstance.push(
                 <Modal.Body>
-                    {clickedImg}
                     <ContentForm
                         update={ update }
                         content={ clickedContent }
+                        image={ clickedImg }
                     />
                 </Modal.Body>
         );
