@@ -90,8 +90,8 @@ class UpdateDeletePost extends React.Component {
         if(state){
             var data = new FormData();
 
-            var check = document.getElementById('formControlsCheck').value;
-            console.log(check);
+            var check = document.getElementById('formControlsCheck').checked;
+            var image = null;
 
             var title = document.getElementById('formTitle').value;
             var content = document.getElementById('formContent').value;
@@ -100,6 +100,11 @@ class UpdateDeletePost extends React.Component {
             var postInfo = this.state.postInfo;
             var clickedTitle = this.state.clickedTitle;
             var clickedContent = this.state.clickedContent;
+
+            if(check){
+                image = document.getElementById('formControlsImage').files[0];
+                data.append('image', image);
+            }
 
             // console.log(title);
             // console.log(content);

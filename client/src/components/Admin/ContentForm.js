@@ -52,19 +52,18 @@ class ContentForm extends React.Component {
                 </FormGroup>
             );
             imageInstance.push(
-                <div>
-                    <FormGroup>
-                        <Checkbox inline checked={this.state.checkboxChecked} onChange={this.handleChangeCheckBox} >
-                            1
-                        </Checkbox>
-                    </FormGroup>
-        
+                <Checkbox id="formControlsCheck" checked={this.state.checkboxChecked} onChange={this.handleChangeCheckBox} >
+                    이미지 수정
+                </Checkbox>
+            );
+            if(this.state.checkboxChecked){
+                imageInstance.push(
                     <FormGroup controlId="formControlsImage">
                         <ControlLabel>이미지 업로드</ControlLabel>
                         <FormControl type="file" />
                     </FormGroup>
-                </div>
-            );
+                );
+            }
         } else {
             contentInstance.push(
                 content
