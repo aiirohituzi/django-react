@@ -34,7 +34,7 @@ class ContentForm extends React.Component {
 
     handleChangeCheckBox(e) {
         this.setState({ checkboxChecked: e.target.checked });
-        console.log(this.state.checkboxChecked);
+        // console.log(this.state.checkboxChecked);
     }
 
     render() {
@@ -58,8 +58,7 @@ class ContentForm extends React.Component {
             );
             if(this.state.checkboxChecked){
                 imageInstance.push(
-                    <FormGroup controlId="formControlsImage">
-                        <ControlLabel>이미지 업로드</ControlLabel>
+                    <FormGroup controlId="formControlsUpdateImage">
                         <FormControl type="file" />
                     </FormGroup>
                 );

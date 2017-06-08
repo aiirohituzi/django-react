@@ -188,7 +188,8 @@ def updatePost(request):
 
         if(fileCheck):
             img_row = Images.objects.get(postId_id=postId)
-            img_row.image = filecheck
+            print(fileCheck)
+            img_row.image = fileCheck
             img_row.save()
             print(" - Image updated")
 

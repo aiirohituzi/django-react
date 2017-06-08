@@ -102,7 +102,9 @@ class UpdateDeletePost extends React.Component {
             var clickedContent = this.state.clickedContent;
 
             if(check){
-                image = document.getElementById('formControlsImage').files[0];
+                image = document.getElementById('formControlsUpdateImage').files[0];
+                console.log(image);
+                console.log('---------------------')
                 data.append('image', image);
             }
 
