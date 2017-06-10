@@ -90,7 +90,8 @@ class UpdateDeletePost extends React.Component {
         if(state){
             var data = new FormData();
 
-            var check = document.getElementById('formControlsCheck').checked;
+            var upCheck = document.getElementById('imgUpdateCheck').checked;
+            var delCheck = document.getElementById('imgDelCheck').checked;
             var image = null;
 
             var title = document.getElementById('formTitle').value;
@@ -101,11 +102,30 @@ class UpdateDeletePost extends React.Component {
             var clickedTitle = this.state.clickedTitle;
             var clickedContent = this.state.clickedContent;
 
-            if(check){
-                image = document.getElementById('formControlsUpdateImage').files[0];
-                console.log(image);
-                console.log('---------------------')
+            if(delCheck){
+                image = 'None';
                 data.append('image', image);
+            }else if(upCheck){
+                image = document.getElementById('formControlsUpdateImage').files[0];
+                // console.log(image);
+                // console.log('---------------------')
+                data.append('image', image);
+
+                if(image == undefined){
+                    image = null;
+                    console.log('Not selected');
+                    alert('파일을 선택해주세요');
+
+                    return;
+                } else {
+                    var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                    // console.log(fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()));
+                    if (fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()) == -1){
+                        alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
+
+                        return;
+                    }
+                }
             }
 
             // console.log(title);

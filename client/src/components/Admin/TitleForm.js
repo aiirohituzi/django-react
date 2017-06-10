@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormGroup, FormControl } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 class TitleForm extends React.Component {
     constructor(props) {
@@ -37,6 +37,7 @@ class TitleForm extends React.Component {
         if(update){
             titleInstance.push(
                 <FormGroup controlId="formTitle">
+                    <ControlLabel>제목</ControlLabel>
                     <FormControl type="text" placeholder="글 제목을 입력해주세요." value={ title } onChange={ this.handleChange } />
                     {/*<FormControl type="text" placeholder="글 제목을 입력해주세요."/>*/}
                 </FormGroup>

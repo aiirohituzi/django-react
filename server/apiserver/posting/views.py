@@ -163,8 +163,10 @@ def updatePost(request):
     username = request.POST['user']
     password = request.POST['password']
     fileCheck = request.FILES.get('image', False)
-
-    # print(postId)
+    if(not fileCheck):
+        fileCheck = request.POST.get('image', False)
+    
+    # print(fileCheck)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
@@ -187,11 +189,14 @@ def updatePost(request):
         row.save()
 
         if(fileCheck):
-            img_row = Images.objects.get(postId_id=postId)
-            print(fileCheck)
-            img_row.image = fileCheck
-            img_row.save()
-            print(" - Image updated")
+            if(fileCheck == "None"):
+                print('asdfasdf')
+            else:
+                img_row = Images.objects.get(postId_id=postId)
+                # print(fileCheck)
+                img_row.image = fileCheck
+                img_row.save()
+                print(" - Image updated")
 
         log += 'Update Post Request : post ' + str(row.id) + ' Update success'
         print(log)
