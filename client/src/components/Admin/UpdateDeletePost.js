@@ -116,6 +116,7 @@ class UpdateDeletePost extends React.Component {
                     console.log('Not selected');
                     alert('파일을 선택해주세요');
 
+                    // document.getElementById('imgUpdateCheck').checked = false;
                     return;
                 } else {
                     var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
@@ -123,6 +124,7 @@ class UpdateDeletePost extends React.Component {
                     if (fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()) == -1){
                         alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
 
+                        // document.getElementById('imgUpdateCheck').checked = false;
                         return;
                     }
                 }
@@ -159,6 +161,10 @@ class UpdateDeletePost extends React.Component {
                 console.log(error);
             });
 
+            // document.getElementById('imgUpdateCheck').checked = false;
+            // document.getElementById('imgDelCheck').checked = false;
+
+            await this.getImage(postId);
             this.setState({
                 postInfo: postInfo,
                 clickedTitle: clickedTitle,

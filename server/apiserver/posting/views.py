@@ -166,7 +166,7 @@ def updatePost(request):
     if(not fileCheck):
         fileCheck = request.POST.get('image', False)
     
-    # print(fileCheck)
+    print(fileCheck)
 
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
@@ -190,13 +190,42 @@ def updatePost(request):
 
         if(fileCheck):
             if(fileCheck == "None"):
-                print('asdfasdf')
+                print('Update Post Request : Image delete request')
+                isEmpty = False
+                try:
+                    img_row = Images.objects.get(postId_id=postId)
+                except Images.DoesNotExist:
+                    isEmpty = True
+                    print(" - This post have not image.")
+
+                if(not isEmpty):
+                    img_row.delete()
+                    print("- Image deleted")
             else:
-                img_row = Images.objects.get(postId_id=postId)
-                # print(fileCheck)
-                img_row.image = fileCheck
-                img_row.save()
-                print(" - Image updated")
+                print('Update Post Request : Image update request')
+                isEmpty = False
+                try:
+                    img_row = Images.objects.get(postId_id=postId)
+                except Images.DoesNotExist:
+                    isEmpty = True
+
+                if(isEmpty):
+                    dict = {'postId': postId,}
+                    qdict = QueryDict('', mutable=True)
+                    qdict.update(dict)
+
+                    imageForm = ImageForm(qdict, request.FILES)
+                    img_obj = imageForm.save(commit=False)
+                    img_obj.save()
+
+                    print(" - Image included")
+                
+                else:
+                    print(img_row)
+                    img_row.image = fileCheck
+                    img_row.save()
+                    print(" - Image updated")
+
 
         log += 'Update Post Request : post ' + str(row.id) + ' Update success'
         print(log)
