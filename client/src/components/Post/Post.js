@@ -119,7 +119,8 @@ class Post extends React.Component {
         else {
             clickedImg = (
                 <div>
-                    <img src={this.state.clickedImg} style={{width: 200}}/>
+                    <img src={this.state.clickedImg} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}}/>
+                    <hr/>
                 </div>
             )
         }
