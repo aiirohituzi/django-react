@@ -7,7 +7,6 @@ class UploadPost extends React.Component {
     constructor(props) {
         super(props);
 
-        
         this.upload = this.upload.bind(this);
     }
 
@@ -77,6 +76,9 @@ class UploadPost extends React.Component {
         .catch(function (error) {
             console.log(error);
         });
+
+        
+        window.location.reload(true);
     }
 
     render() {

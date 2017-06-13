@@ -183,33 +183,37 @@ class UpdateDeletePost extends React.Component {
     }
 
     delete = async (postId, listId) => {
-        var loginId = sessionStorage.getItem('loginId');
-        var loginPw = sessionStorage.getItem('loginPw');
-        var postInfo = this.state.postInfo;
+        var decision = confirm('정말로 삭제하시겠습니까?');
 
-        await axios.post('http://127.0.0.1:8000/delete/', {
-            postId: postId,
-            user: loginId,
-            password: loginPw
-        })
-        .then(function (response) {
-            // console.log(response.data);
-            if(response.data == 'True'){
+        if(decision){
+            var loginId = sessionStorage.getItem('loginId');
+            var loginPw = sessionStorage.getItem('loginPw');
+            var postInfo = this.state.postInfo;
+
+            await axios.post('http://127.0.0.1:8000/delete/', {
+                postId: postId,
+                user: loginId,
+                password: loginPw
+            })
+            .then(function (response) {
                 // console.log(response.data);
-                // console.log(postInfo);
-                delete postInfo[listId];
-            } else {
-                console.log('Error');
-                alert('Error');
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-        // console.log(postInfo);
-        
-        this.close();
-        this.forceUpdate();
+                if(response.data == 'True'){
+                    // console.log(response.data);
+                    // console.log(postInfo);
+                    delete postInfo[listId];
+                } else {
+                    console.log('Error');
+                    alert('Error');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            // console.log(postInfo);
+            
+            this.close();
+            this.forceUpdate();
+        }
     }
 
     modalOpen() {
