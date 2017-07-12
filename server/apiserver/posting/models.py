@@ -1,6 +1,9 @@
 from django.db import models
-
 from smartfields import fields
+
+from django.conf import settings
+import os
+from django.core.files.storage import FileSystemStorage
 
 # Create your models here.
 class Posting(models.Model):  
@@ -16,7 +19,9 @@ class Posting(models.Model):
 
 
 class Images(models.Model):
-    image = fields.ImageField(upload_to='image/%Y/%m/%d/orig')              # '원본 사진 파일'
+    fs = FileSystemStorage(location=settings.FILES_DIR)
+    image = fields.ImageField(upload_to='%Y/%m/%d/orig', storage=fs)
+    # image = fields.ImageField(upload_to='image/%Y/%m/%d/orig')              # '원본 사진 파일'
     created_at = models.DateTimeField(auto_now_add=True)                    # '생성일시'
     postId = models.ForeignKey(Posting, related_name='imageRelate', default='0')
     # 당장은 한개의 image만 post와 연결되지만 여러개의 image가 하나의 post와 연결 될 경우를 생각해서 image에 foreignkey를 등록
