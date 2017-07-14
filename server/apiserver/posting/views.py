@@ -272,8 +272,27 @@ def deletePost(request):
     
     if row != None:
         log += 'Delete Post Request : post ' + str(row.id) + ' delete success'
-        print(log)
+
+        isEmpty = False
+        try:
+            img_row = Images.objects.get(postId_id=row.id)
+        except Images.DoesNotExist:
+            isEmpty = True
+
+        if(not isEmpty):
+            file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print("image delete")
+            else:
+                print("image delete error")
+                return HttpResponse(result)
+        else:
+            print("not image")
+
+
         row.delete()
+        print(log)
         result = True
     else:
         print("Delete Post Request : Delete error")
