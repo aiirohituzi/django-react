@@ -50,7 +50,7 @@ class Link2 extends React.Component{
                 <hr />
                 <button onClick={this.getImage}>getImageTest</button>
                 {imgInstance}
-                <img src="/../server/apiserver/image/2017/06/11/orig/test_image_2h3glmw.png" />
+                <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/2017/07/12/orig/test_image.png")} />
             </div>
         );
     }
