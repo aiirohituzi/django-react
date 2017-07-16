@@ -64,7 +64,8 @@ class Post extends React.Component {
         .then(function (response) {
             // console.log(response);
             if(!(response.data == 'False')){
-                img = 'data:image/png;base64,' + response.data;
+                // img = 'data:image/png;base64,' + response.data;
+                img = response.data
             } else {
                 img = null;
             }
@@ -119,7 +120,8 @@ class Post extends React.Component {
         else {
             clickedImg = (
                 <div>
-                    <img src={this.state.clickedImg} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}}/>
+                    {/* <img src={this.state.clickedImg} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}}/>  */}
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImg)} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
                     <hr/>
                 </div>
             )

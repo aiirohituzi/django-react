@@ -64,11 +64,16 @@ def getImageByPostId(request):
     # print(postId)
     img = Images.objects.filter(postId_id=postId)
     if(img):
-        f = open(settings.FILES_DIR + '/' + str(img[0].image), 'rb')
-        image = File(f)
-        print(image)
-        data = base64.b64encode(image.read())
-        f.close()
+        ############ base64 방식 #############
+        # f = open(settings.FILES_DIR + '/' + str(img[0].image), 'rb')
+        # image = File(f)
+        # print(image)
+        # data = base64.b64encode(image.read())
+        # f.close()
+        ######################################
+
+        # print(str(img[0].image))
+        data = str(img[0].image)
     else:
         data = False
     # print(data)
