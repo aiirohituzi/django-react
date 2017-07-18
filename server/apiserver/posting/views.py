@@ -330,6 +330,9 @@ def login(request):
     login_valid = (settings.ADMIN_LOGIN == username)
     pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
 
+    # print(password)
+    # print(settings.ADMIN_PASSWORD)
+
     print('ID Check... ' + str(login_valid))
     print('PW Check... ' + str(pwd_valid))
 

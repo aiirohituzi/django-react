@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+# from django.contrib.auth.models import User
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,5 +131,8 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
 ADMIN_LOGIN = 'admin'
+# ADMIN_LOGIN = User.objects.get(pk=1).username
 ADMIN_PASSWORD = 'pbkdf2_sha256$36000$5M8UqzMLMw8S$F8WJ46Fl+ysYVyodYkhcyGrUnbfrpKSpjFtjVx4QHjI='
+# ADMIN_PASSWORD = User.objects.get(pk=1).password
