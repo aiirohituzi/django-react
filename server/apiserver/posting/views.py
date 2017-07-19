@@ -33,6 +33,9 @@ import base64
 
 import os
 
+ADMIN_LOGIN = User.objects.get(pk=1).username
+ADMIN_PASSWORD = User.objects.get(pk=1).password
+
 
 # Create your views here.
 class PostingViewSet(viewsets.ModelViewSet):  
@@ -95,8 +98,8 @@ def uploadPost(request):
 
     print(fileCheck)
 
-    login_valid = (settings.ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    login_valid = (ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # dict = {'user': username, 'password': password, 'title': title, 'content': content}
     # qdict = QueryDict('', mutable=True)
@@ -175,8 +178,8 @@ def updatePost(request):
     
     print(fileCheck)
 
-    login_valid = (settings.ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    login_valid = (ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     if not login_valid and pwd_valid:
         return HttpResponse(False)
@@ -257,8 +260,8 @@ def deletePost(request):
 
     print(postId)
 
-    login_valid = (settings.ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    login_valid = (ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # print(login_valid)
     # print(pwd_valid)
@@ -324,11 +327,16 @@ def login(request):
     username = data['user']
     password = data['password']
 
+    # ADMIN_LOGIN = User.objects.get(pk=1).username
+    # ADMIN_PASSWORD = User.objects.get(pk=1).password
+    # print(User.objects.get(pk=1).username)
+    # print(User.objects.get(pk=1).password)
+
     # print('ID : ' + username)
     # print('PW : ' + password)
 
-    login_valid = (settings.ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    login_valid = (ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # print(password)
     # print(settings.ADMIN_PASSWORD)
@@ -357,8 +365,8 @@ def uploadImage(request):
     username = request.POST['user']
     password = request.POST['password']
 
-    login_valid = (settings.ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, settings.ADMIN_PASSWORD)
+    login_valid = (ADMIN_LOGIN == username)
+    pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     form = ImageForm(request.POST, request.FILES)      # image Form으로 교체 필요
     # row = models.User.objects.get(username=username)        # 게시물에 종속시켜야하니 그쪽 관련으로 변경 필요
