@@ -196,7 +196,6 @@ def updatePost(request):
     if row != None:
         row.title = title
         row.content = content
-        row.save()
 
         if(fileCheck):
             if(fileCheck == "None"):
@@ -209,6 +208,13 @@ def updatePost(request):
                     print(" - This post have not image.")
 
                 if(not isEmpty):
+                    file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                        # print("image delete")
+                    else:
+                        print("image delete error")
+                        return HttpResponse(result)
                     img_row.delete()
                     print("- Image deleted")
             else:
@@ -233,10 +239,20 @@ def updatePost(request):
                 else:
                     print(img_row)
                     img_row.image = fileCheck
+
+                    file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                        # print("image delete")
+                    else:
+                        print("Warning - previous image delete error")
+                        # return HttpResponse(result)
+
                     img_row.save()
                     print(" - Image updated")
 
 
+        row.save()
         log += 'Update Post Request : post ' + str(row.id) + ' Update success'
         print(log)
         result = True
