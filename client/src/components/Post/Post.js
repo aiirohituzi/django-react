@@ -65,7 +65,11 @@ class Post extends React.Component {
             // console.log(response);
             if(!(response.data == 'False')){
                 // img = 'data:image/png;base64,' + response.data;
-                img = response.data
+                console.log(response.data)
+                for(var i=0; i<response.data.length; i++){
+                    console.log(i + ' : ' + response.data[i])
+                }
+                img = response.data[0]
             } else {
                 img = null;
             }

@@ -63,6 +63,7 @@ def api_root(request, format=None):
 
 @csrf_exempt
 def getImageByPostId(request):
+    data = []
     postId = request.POST['postId']
     # print(postId)
     img = Images.objects.filter(postId_id=postId)
@@ -76,11 +77,16 @@ def getImageByPostId(request):
         ######################################
 
         # print(str(img[0].image))
-        data = str(img[0].image)
+        # data = str(img[0].image)
+        for row in img:
+            data.append(str(row.image))
+        data.append(str(img[0].image))
+
+        data = json.dumps(data)
     else:
         data = False
     # print(data)
-    return HttpResponse(data)
+    return HttpResponse(data, content_type = "application/json")
 
 
 
