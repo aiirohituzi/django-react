@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import update from 'react-addons-update'
 
 class Link2 extends React.Component{
     constructor(props) {
@@ -7,9 +8,11 @@ class Link2 extends React.Component{
 
         this.state = {
             imgInfo: '',
+            list: [],
         }
 
         this.getImage = this.getImage.bind(this);
+        this.stateArrayTest = this.stateArrayTest.bind(this);
     }
 
     getImage = async () => {
@@ -35,9 +38,28 @@ class Link2 extends React.Component{
         });
     }
 
+    stateArrayTest() {
+        this.setState({
+            list: update(
+                this.state.list, 
+                {
+                    $push: ['1', '2']
+                }
+            )
+        });
+    }
+
     render() {
         const imgPath = 'data:image/png;base64,' + this.state.imgInfo;
+        const arr = this.state.list;
         
+        const arrInstance = (
+            <div>
+            {arr[0]}<br/>
+            {arr[1]}<br/>
+            {arr.length}
+            </div>
+        )
 
         const imgInstance = (
             <img src={imgPath} width="80%" />
@@ -51,6 +73,8 @@ class Link2 extends React.Component{
                 <button onClick={this.getImage}>getImageTest</button>
                 {imgInstance}
                 <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../image/2017/07/12/orig/test_image.png")} />
+                <button onClick={this.stateArrayTest}>state array test</button>
+                {arrInstance}
             </div>
         );
     }

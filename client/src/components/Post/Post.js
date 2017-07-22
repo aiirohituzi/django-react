@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import update from 'react-addons-update'    // state안에 array 삽입 위한 라이브러리
+
 import { Grid, Row, Col, Thumbnail, Button, Modal } from 'react-bootstrap';
 // import Grid from 'react-bootstrap/lib/Grid';
 // import Row from 'react-bootstrap/lib/Row';
@@ -53,7 +55,7 @@ class Post extends React.Component {
 
     getImage = async (id) => {
         var data = new FormData();
-        var img;
+        var img = [];
         data.append('postId', id);
 
         const config = {
@@ -68,8 +70,9 @@ class Post extends React.Component {
                 console.log(response.data)
                 for(var i=0; i<response.data.length; i++){
                     console.log(i + ' : ' + response.data[i])
+                    img.push(response.data[i])
                 }
-                img = response.data[0]
+                // img = response.data[0]
             } else {
                 img = null;
             }
@@ -79,7 +82,13 @@ class Post extends React.Component {
         });
 
         this.setState({
-            clickedImg: img
+            // clickedImg: img
+            clickedImg: update(
+                this.state.clickedImg,
+                {
+                    $push: [img, ]
+                }
+            )
         });
     }
 
