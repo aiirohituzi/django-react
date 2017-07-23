@@ -80,7 +80,7 @@ def getImageByPostId(request):
         # data = str(img[0].image)
         for row in img:
             data.append(str(row.image))
-        data.append(str(img[0].image))
+        # data.append(str(img[0].image))        # test
 
         data = json.dumps(data)
     else:

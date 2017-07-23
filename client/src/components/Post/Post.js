@@ -21,6 +21,7 @@ class Post extends React.Component {
             clickedTitle: null,
             clickedContent: null,
             clickedImg: null,
+            clickedImgList: [],
         }
 
         this.close = this.close.bind(this);
@@ -67,7 +68,7 @@ class Post extends React.Component {
             // console.log(response);
             if(!(response.data == 'False')){
                 // img = 'data:image/png;base64,' + response.data;
-                console.log(response.data)
+                // console.log(response.data)
                 for(var i=0; i<response.data.length; i++){
                     console.log(i + ' : ' + response.data[i])
                     img.push(response.data[i])
@@ -81,15 +82,28 @@ class Post extends React.Component {
             console.log(error);
         });
 
-        this.setState({
-            // clickedImg: img
-            clickedImg: update(
-                this.state.clickedImg,
-                {
-                    $push: [img, ]
-                }
-            )
-        });
+        if(img == null){
+            this.setState({
+                clickedImg: false
+            });    
+        } else {
+            this.setState({
+                clickedImgList: [],
+            })
+            for(var i=0; i<img.length; i++) {
+                // console.log(img[i])
+                this.setState({
+                    // clickedImg: img
+                    clickedImg: true,
+                    clickedImgList: update(
+                        this.state.clickedImgList,
+                        {
+                            $push: [img[i]]
+                        }
+                    )
+                });
+            }
+        }
     }
 
     modalOpen() {
@@ -126,15 +140,20 @@ class Post extends React.Component {
 
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
-        var clickedImg;
-        if(this.state.clickedImg == null){
+        var clickedImg = [];
+        var clickedImgList = [];
+        if(!this.state.clickedImg){
             clickedImg = ('');
         }
         else {
+            for(var i=0; i<this.state.clickedImgList.length; i++){
+                clickedImgList.push(
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                );
+            }
             clickedImg = (
                 <div>
-                    {/* <img src={this.state.clickedImg} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}}/>  */}
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImg)} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                    {clickedImgList}
                     <hr/>
                 </div>
             )
