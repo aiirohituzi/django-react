@@ -101,8 +101,10 @@ def uploadPost(request):
     title = request.POST['title']
     content = request.POST['content']
     fileCheck = request.FILES.get('image', False)
-
+    
+    print('---------')
     print(fileCheck)
+    print('---------')
 
     login_valid = (ADMIN_LOGIN == username)
     pwd_valid = check_password(password, ADMIN_PASSWORD)

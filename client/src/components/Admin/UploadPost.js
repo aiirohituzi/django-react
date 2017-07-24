@@ -7,7 +7,13 @@ class UploadPost extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            formCount: 1,
+            formAddBtnValue: '+',
+        }
+
         this.upload = this.upload.bind(this);
+        this.addForm = this.addForm.bind(this);
     }
 
     upload = async () => {
@@ -18,7 +24,7 @@ class UploadPost extends React.Component {
 
         var title = document.getElementById('formControlsTitle').value;
         var content = document.getElementById('formControlsContent').value;
-        var image = document.getElementById('formControlsImage').files[0];
+        var image = document.getElementById('formControlsImage').files;
 
         if(title == ''){
             alert('제목을 입력해주세요.');
@@ -37,14 +43,16 @@ class UploadPost extends React.Component {
         } else {
             var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
             // console.log(fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()));
-            if (fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()) == -1){
-                alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
+            for(var i=0; i<this.state.formCount; i++){
+                if (fileExtension.indexOf(image[i]['name'].split('.').pop().toLowerCase()) == -1){
+                    alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
 
-                document.getElementById('formControlsTitle').value = null;
-                document.getElementById('formControlsContent').value = null;
-                document.getElementById('formControlsImage').value = null;
+                    document.getElementById('formControlsTitle').value = null;
+                    document.getElementById('formControlsContent').value = null;
+                    document.getElementById('formControlsImage').value = null;
 
-                return;
+                    return;
+                }
             }
         }
 
@@ -52,7 +60,14 @@ class UploadPost extends React.Component {
         data.append('password', loginPw);
         data.append('title', title);
         data.append('content', content);
-        data.append('image', image);
+
+        data.append('image', image[0]);
+
+        // for(var i=0; i<this.state.formCount; i++){
+        //     data.append('image'+i, image[i]);
+        //     console.log('image'+i)
+        //     console.log(image[i])
+        // }
 
         const config = {
             headers: { 'content-type': 'multipart/form-data' }
@@ -81,7 +96,28 @@ class UploadPost extends React.Component {
         window.location.reload(true);
     }
 
+    addForm() {
+        if(this.state.formCount<4){
+            this.setState({
+                formCount: this.state.formCount+1
+            });
+        } else {
+            this.setState({
+                formAddBtnValue: '이미지 업로드는 최대 4개 까지만'
+            })
+        }
+    }
+
     render() {
+        const formAddBtnValue = this.state.formAddBtnValue;
+        const fileInstance = [];
+
+        for(var i=0; i<this.state.formCount; i++){
+            fileInstance.push(
+                <FormControl type="file" />
+            );
+        }
+
         return (
             <Grid>
                 <Row>
@@ -95,8 +131,8 @@ class UploadPost extends React.Component {
                             <FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} />
                         </FormGroup>
                         <FormGroup controlId="formControlsImage">
-                            <ControlLabel>이미지 업로드</ControlLabel>
-                            <FormControl type="file" />
+                            <ControlLabel>이미지 업로드</ControlLabel> <Button bsClass="btn btn-primary" onClick={ this.addForm }>{formAddBtnValue}</Button>
+                            {fileInstance}
                         </FormGroup>
                         <Button bsClass="btn btn-primary pull-right" onClick={ this.upload.bind(this) }>Upload</Button>
                     </Col>
