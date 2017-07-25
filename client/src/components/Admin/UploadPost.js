@@ -8,12 +8,10 @@ class UploadPost extends React.Component {
         super(props);
 
         this.state = {
-            formCount: 1,
             formAddBtnValue: '+',
         }
 
         this.upload = this.upload.bind(this);
-        this.addForm = this.addForm.bind(this);
     }
 
     upload = async () => {
@@ -25,6 +23,10 @@ class UploadPost extends React.Component {
         var title = document.getElementById('formControlsTitle').value;
         var content = document.getElementById('formControlsContent').value;
         var image = document.getElementById('formControlsImage').files;
+
+        var uploadResult = false;
+
+        console.log(image.length);
 
         if(title == ''){
             alert('제목을 입력해주세요.');
@@ -43,7 +45,7 @@ class UploadPost extends React.Component {
         } else {
             var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
             // console.log(fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()));
-            for(var i=0; i<this.state.formCount; i++){
+            for(var i=0; i<image.length; i++){
                 if (fileExtension.indexOf(image[i]['name'].split('.').pop().toLowerCase()) == -1){
                     alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
 
@@ -61,13 +63,7 @@ class UploadPost extends React.Component {
         data.append('title', title);
         data.append('content', content);
 
-        data.append('image', image[0]);
-
-        // for(var i=0; i<this.state.formCount; i++){
-        //     data.append('image'+i, image[i]);
-        //     console.log('image'+i)
-        //     console.log(image[i])
-        // }
+        // data.append('image', image[0]);
 
         const config = {
             headers: { 'content-type': 'multipart/form-data' }
@@ -80,9 +76,11 @@ class UploadPost extends React.Component {
                 // console.log(response.data);
                 alert('Upload success');
 
-                document.getElementById('formControlsTitle').value = null;
-                document.getElementById('formControlsContent').value = null;
-                document.getElementById('formControlsImage').value = null;
+                // document.getElementById('formControlsTitle').value = null;
+                // document.getElementById('formControlsContent').value = null;
+                // document.getElementById('formControlsImage').value = null;
+
+                uploadResult = true;
             } else {
                 console.log('Error');
                 alert('Error');
@@ -92,31 +90,52 @@ class UploadPost extends React.Component {
             console.log(error);
         });
 
-        
-        window.location.reload(true);
-    }
+        console.log('---------------');
+        console.log(uploadResult);
 
-    addForm() {
-        if(this.state.formCount<4){
-            this.setState({
-                formCount: this.state.formCount+1
-            });
-        } else {
-            this.setState({
-                formAddBtnValue: '이미지 업로드는 최대 4개 까지만'
-            })
+        if(uploadResult){
+            console.log(image.length);
+            for(var i=0; i<image.length; i++){
+                console.log('aasdfad');
+                data = new FormData();
+
+                data.append('user', loginId);
+                data.append('password', loginPw);
+                data.append('image', image[i])
+
+                await axios.post('http://127.0.0.1:8000/upImage/', data, config)
+                .then(function (response) {
+                    // console.log(response.data);
+                    if(response.data == 'True'){
+                        // console.log(response.data);
+                        console.log('Image Upload success');
+                    } else {
+                        console.log('Error');
+                        alert('Error');
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         }
+
+
+        document.getElementById('formControlsTitle').value = null;
+        document.getElementById('formControlsContent').value = null;
+        document.getElementById('formControlsImage').value = null;
+        window.location.reload(true);
     }
 
     render() {
         const formAddBtnValue = this.state.formAddBtnValue;
         const fileInstance = [];
 
-        for(var i=0; i<this.state.formCount; i++){
-            fileInstance.push(
-                <FormControl type="file" />
-            );
-        }
+        // for(var i=0; i<this.state.formCount; i++){
+        //     fileInstance.push(
+        //         <FormControl type="file" multiple />
+        //     );
+        // }
 
         return (
             <Grid>
@@ -131,8 +150,8 @@ class UploadPost extends React.Component {
                             <FormControl componentClass="textarea" placeholder="글 내용을 입력해주세요." style={{ height: 200 }} />
                         </FormGroup>
                         <FormGroup controlId="formControlsImage">
-                            <ControlLabel>이미지 업로드</ControlLabel> <Button bsClass="btn btn-primary" onClick={ this.addForm }>{formAddBtnValue}</Button>
-                            {fileInstance}
+                            <ControlLabel>이미지 업로드</ControlLabel>
+                            <FormControl type="file" multiple />
                         </FormGroup>
                         <Button bsClass="btn btn-primary pull-right" onClick={ this.upload.bind(this) }>Upload</Button>
                     </Col>

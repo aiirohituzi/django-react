@@ -100,11 +100,11 @@ def uploadPost(request):
     password = request.POST['password']
     title = request.POST['title']
     content = request.POST['content']
-    fileCheck = request.FILES.get('image', False)
+    # fileCheck = request.FILES.get('image', False)
     
-    print('---------')
-    print(fileCheck)
-    print('---------')
+    # print('---------')
+    # print(fileCheck)
+    # print('---------')
 
     login_valid = (ADMIN_LOGIN == username)
     pwd_valid = check_password(password, ADMIN_PASSWORD)
@@ -134,23 +134,25 @@ def uploadPost(request):
         post_obj.owner_id = user_row.id
         post_obj.save()      # obj.save(commit=True) 와 동일
 
-        if(fileCheck):
-            post_row = Posting.objects.all().last()
 
-            dict = {'postId': post_row.id,}
-            qdict = QueryDict('', mutable=True)
-            qdict.update(dict)
+        # 이미지 복수 업로드를 위해 분리
+        # if(fileCheck):
+        #     post_row = Posting.objects.all().last()
 
-            # print(qdict)
-            # print('------------------------------------')
-            # print(request.POST)
+        #     dict = {'postId': post_row.id,}
+        #     qdict = QueryDict('', mutable=True)
+        #     qdict.update(dict)
 
-            imageForm = ImageForm(qdict, request.FILES)
-            # print(imageForm.is_valid())
+        #     # print(qdict)
+        #     # print('------------------------------------')
+        #     # print(request.POST)
 
-            img_obj = imageForm.save(commit=False)
-            img_obj.save()
-            print(" - Image included")
+        #     imageForm = ImageForm(qdict, request.FILES)
+        #     # print(imageForm.is_valid())
+
+        #     img_obj = imageForm.save(commit=False)
+        #     img_obj.save()
+        #     print(" - Image included")
 
 
         print("Create Post Request : Post success")
@@ -392,15 +394,36 @@ def uploadImage(request):
     login_valid = (ADMIN_LOGIN == username)
     pwd_valid = check_password(password, ADMIN_PASSWORD)
 
-    form = ImageForm(request.POST, request.FILES)      # image Form으로 교체 필요
-    # row = models.User.objects.get(username=username)        # 게시물에 종속시켜야하니 그쪽 관련으로 변경 필요
+    # form = ImageForm(request.POST, request.FILES)
+
+    fileCheck = request.FILES.get('image', False)
+    
+    # print('---------')
+    # print(fileCheck)
+    # print('---------')
 
     if not login_valid and pwd_valid:
         return HttpResponse(False)
 
-    print(form)
-    if form.is_valid():
-        obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+    if fileCheck:
+        post_row = Posting.objects.all().last()     # 막 업로드 된 최신 게시글에 이미지 FK로 연결
+
+        dict = {'postId': post_row.id,}
+        qdict = QueryDict('', mutable=True)
+        qdict.update(dict)
+
+        # print(qdict)
+        # print('------------------------------------')
+        # print(request.POST)
+
+        imageForm = ImageForm(qdict, request.FILES)
+        # print(imageForm.is_valid())
+
+        img_obj = imageForm.save(commit=False)
+        img_obj.save()
+        # print(" - Image included")
+
+        # obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
         # obj.owner_id = row.id
         # obj.save()      # obj.save(commit=True) 와 동일
         print("Image Upload Request : Upload success")
