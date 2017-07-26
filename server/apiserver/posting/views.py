@@ -309,18 +309,19 @@ def deletePost(request):
 
         isEmpty = False
         try:
-            img_row = Images.objects.get(postId_id=row.id)
+            img_obj = Images.objects.filter(postId_id=row.id)
         except Images.DoesNotExist:
             isEmpty = True
 
         if(not isEmpty):
-            file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-                print("image delete")
-            else:
-                print("image delete error")
-                return HttpResponse(result)
+            for img_row in img_obj:
+                file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                    print(str(img_row.image) + "image delete")
+                else:
+                    print("image delete error")
+                    return HttpResponse(result)
         else:
             print("not image")
 
