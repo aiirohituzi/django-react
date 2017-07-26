@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import update from 'react-addons-update'
+
 import TitleForm from './TitleForm';
 import ContentForm from './ContentForm';
 
@@ -19,6 +21,8 @@ class UpdateDeletePost extends React.Component {
             clickedTitle: null,
             clickedContent: null,
             clickedListId: null,
+            clickedImg: null,
+            clickedImgList: [],
             update: false,
         }
 
@@ -59,7 +63,7 @@ class UpdateDeletePost extends React.Component {
 
     getImage = async (id) => {
         var data = new FormData();
-        var img;
+        var img = [];
         data.append('postId', id);
 
         const config = {
@@ -71,7 +75,11 @@ class UpdateDeletePost extends React.Component {
             // console.log(response);
             if(!(response.data == 'False')){
                 // img = 'data:image/png;base64,' + response.data;
-                img = response.data
+                // img = response.data
+                for(var i=0; i<response.data.length; i++){
+                    console.log(i + ' : ' + response.data[i])
+                    img.push(response.data[i])
+                }
             } else {
                 img = null;
             }
@@ -80,9 +88,28 @@ class UpdateDeletePost extends React.Component {
             console.log(error);
         });
 
-        this.setState({
-            clickedImg: img
-        });
+        if(img == null){
+            this.setState({
+                clickedImg: false
+            });    
+        } else {
+            this.setState({
+                clickedImgList: [],
+            })
+            for(var i=0; i<img.length; i++) {
+                // console.log(img[i])
+                this.setState({
+                    // clickedImg: img
+                    clickedImg: true,
+                    clickedImgList: update(
+                        this.state.clickedImgList,
+                        {
+                            $push: [img[i]]
+                        }
+                    )
+                });
+            }
+        }
     }
 
     update = async (state, postId, listId) => {
@@ -247,15 +274,20 @@ class UpdateDeletePost extends React.Component {
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
         const clickedListId = this.state.clickedListId;
-        var clickedImg;
-        if(this.state.clickedImg == null){
+        var clickedImg = [];
+        var clickedImgList = [];
+        if(!this.state.clickedImg){
             clickedImg = ('');
         }
         else {
+            for(var i=0; i<this.state.clickedImgList.length; i++){
+                clickedImgList.push(
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                );
+            }
             clickedImg = (
                 <div>
-                    {/* <img src={this.state.clickedImg} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}}/> */}
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImg)} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                    {clickedImgList}
                     <hr/>
                 </div>
             )
