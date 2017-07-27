@@ -186,7 +186,7 @@ def updatePost(request):
     if(not fileCheck):
         fileCheck = request.POST.get('image', False)
     
-    print(fileCheck)
+    # print(fileCheck)
 
     login_valid = (ADMIN_LOGIN == username)
     pwd_valid = check_password(password, ADMIN_PASSWORD)
@@ -212,21 +212,22 @@ def updatePost(request):
                 print('Update Post Request : Image delete request')
                 isEmpty = False
                 try:
-                    img_row = Images.objects.get(postId_id=postId)
+                    obj = Images.objects.filter(postId_id=postId)
                 except Images.DoesNotExist:
                     isEmpty = True
                     print(" - This post have not image.")
 
                 if(not isEmpty):
-                    file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
-                    if os.path.isfile(file_path):
-                        os.remove(file_path)
-                        # print("image delete")
-                    else:
-                        print("image delete error")
-                        return HttpResponse(result)
-                    img_row.delete()
-                    print("- Image deleted")
+                    for img_row in img_obj:
+                        file_path = os.path.join(settings.FILES_DIR, str(img_obj.image))
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                            # print("image delete")
+                        else:
+                            print("image delete error")
+                            return HttpResponse(result)
+                        img_row.delete()
+                        print("- Image deleted")
             else:
                 print('Update Post Request : Image update request')
                 isEmpty = False
