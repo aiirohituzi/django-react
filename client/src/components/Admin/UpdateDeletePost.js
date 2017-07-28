@@ -130,14 +130,15 @@ class UpdateDeletePost extends React.Component {
             var clickedTitle = this.state.clickedTitle;
             var clickedContent = this.state.clickedContent;
 
+            var updateResult = false;
+
             if(delCheck){
                 image = 'None';
                 data.append('image', image);
             }else if(upCheck){
-                image = document.getElementById('formControlsUpdateImage').files[0];
+                image = document.getElementById('formControlsUpdateImage').files;
                 // console.log(image);
                 // console.log('---------------------')
-                data.append('image', image);
 
                 if(image == undefined){
                     image = null;
@@ -149,13 +150,17 @@ class UpdateDeletePost extends React.Component {
                 } else {
                     var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
                     // console.log(fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()));
-                    if (fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()) == -1){
-                        alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
 
-                        // document.getElementById('imgUpdateCheck').checked = false;
-                        return;
+                    for(var i=0; i<image.length; i++){
+                        if (fileExtension.indexOf(image[i]['name'].split('.').pop().toLowerCase()) == -1){
+                            alert("'.jpeg','.jpg', '.png', '.gif', '.bmp' 형식의 파일만 업로드 가능합니다.");
+
+                            return;
+                        }
                     }
                 }
+
+                data.append('image', image[0]);
             }
 
             // console.log(title);
@@ -180,6 +185,8 @@ class UpdateDeletePost extends React.Component {
                     postInfo[listId].content = content;
                     clickedTitle = title;
                     clickedContent = content;
+
+                    updateResult = true;
                 } else {
                     console.log('Error');
                     alert('Error');
@@ -191,6 +198,34 @@ class UpdateDeletePost extends React.Component {
 
             // document.getElementById('imgUpdateCheck').checked = false;
             // document.getElementById('imgDelCheck').checked = false;
+
+            
+            if(updateResult && (image != 'None')){
+                for(var i=0; i<image.length; i++){
+                    data = new FormData();
+
+                    data.append('user', loginId);
+                    data.append('password', loginPw);
+                    data.append('image', image[i])
+
+                    await axios.post('http://127.0.0.1:8000/upImage/', data, config)
+                    .then(function (response) {
+                        // console.log(response.data);
+                        if(response.data == 'True'){
+                            // console.log(response.data);
+                            console.log('Image Upload success');
+                        } else {
+                            console.log('Error');
+                            alert('Error');
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            }
+
+
 
             await this.getImage(postId);
             this.setState({

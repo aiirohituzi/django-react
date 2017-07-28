@@ -80,7 +80,7 @@ class ContentForm extends React.Component {
             if(this.state.updateChecked){
                 imageInstance.push(
                     <FormGroup controlId="formControlsUpdateImage">
-                        <FormControl type="file" />
+                        <FormControl type="file" multiple />
                     </FormGroup>
                 );
             }

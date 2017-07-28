@@ -96,7 +96,6 @@ class UploadPost extends React.Component {
         if(uploadResult){
             console.log(image.length);
             for(var i=0; i<image.length; i++){
-                console.log('aasdfad');
                 data = new FormData();
 
                 data.append('user', loginId);

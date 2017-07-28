@@ -27,6 +27,7 @@ from posting.views import deletePost
 from posting.views import uploadImage
 from posting.views import getImageByPostId
 from posting.views import my_image
+from posting.views import test
 
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
@@ -43,4 +44,5 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^images/$', getImageByPostId, name='images'),
     url(r'^myimage/$', my_image, name='myimages'),
+    url(r'^test/$', test, name='test'),
 ]

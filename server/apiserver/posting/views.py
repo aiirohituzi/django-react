@@ -212,14 +212,14 @@ def updatePost(request):
                 print('Update Post Request : Image delete request')
                 isEmpty = False
                 try:
-                    obj = Images.objects.filter(postId_id=postId)
+                    img_obj = Images.objects.filter(postId_id=postId)
                 except Images.DoesNotExist:
                     isEmpty = True
                     print(" - This post have not image.")
 
                 if(not isEmpty):
                     for img_row in img_obj:
-                        file_path = os.path.join(settings.FILES_DIR, str(img_obj.image))
+                        file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
                         if os.path.isfile(file_path):
                             os.remove(file_path)
                             # print("image delete")
@@ -228,39 +228,56 @@ def updatePost(request):
                             return HttpResponse(result)
                         img_row.delete()
                         print("- Image deleted")
-            else:
-                print('Update Post Request : Image update request')
+            else:                       # image update
                 isEmpty = False
                 try:
-                    img_row = Images.objects.get(postId_id=postId)
+                    img_obj = Images.objects.filter(postId_id=postId)
                 except Images.DoesNotExist:
                     isEmpty = True
+                    print(" - This post have not image.")
 
-                if(isEmpty):
-                    dict = {'postId': postId,}
-                    qdict = QueryDict('', mutable=True)
-                    qdict.update(dict)
+                if(not isEmpty):
+                    for img_row in img_obj:
+                        file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                        else:
+                            print("image update error")
+                            return HttpResponse(result)
+                        img_row.delete()
 
-                    imageForm = ImageForm(qdict, request.FILES)
-                    img_obj = imageForm.save(commit=False)
-                    img_obj.save()
+                # print('Update Post Request : Image update request')
+                # isEmpty = False
+                # try:
+                #     img_row = Images.objects.get(postId_id=postId)
+                # except Images.DoesNotExist:
+                #     isEmpty = True
 
-                    print(" - Image included")
+                # if(isEmpty):
+                #     dict = {'postId': postId,}
+                #     qdict = QueryDict('', mutable=True)
+                #     qdict.update(dict)
+
+                #     imageForm = ImageForm(qdict, request.FILES)
+                #     img_obj = imageForm.save(commit=False)
+                #     img_obj.save()
+
+                #     print(" - Image included")
                 
-                else:
-                    print(img_row)
-                    img_row.image = fileCheck
+                # else:
+                #     print(img_row)
+                #     img_row.image = fileCheck
 
-                    file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
-                    if os.path.isfile(file_path):
-                        os.remove(file_path)
-                        # print("image delete")
-                    else:
-                        print("Warning - previous image delete error")
-                        # return HttpResponse(result)
+                #     file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
+                #     if os.path.isfile(file_path):
+                #         os.remove(file_path)
+                #         # print("image delete")
+                #     else:
+                #         print("Warning - previous image delete error")
+                #         # return HttpResponse(result)
 
-                    img_row.save()
-                    print(" - Image updated")
+                #     img_row.save()
+                #     print(" - Image updated")
 
 
         row.save()
@@ -455,3 +472,17 @@ def my_image(request):
     print(file_path)
     image_data = open(file_path, "rb").read()
     return HttpResponse(image_data, content_type="image/png")
+
+
+
+@csrf_exempt
+def test(request):
+    print('------------------------------')
+    print(request)
+    print('------------------------------')
+    # print(request.body)
+    print('------------------------------')
+    print(request.FILES)
+    print('------------------------------')
+
+    return HttpResponse('test')

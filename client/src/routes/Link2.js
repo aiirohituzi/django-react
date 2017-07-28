@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import update from 'react-addons-update'
 
+import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+
 class Link2 extends React.Component{
     constructor(props) {
         super(props);
@@ -11,8 +13,28 @@ class Link2 extends React.Component{
             list: [],
         }
 
+        this.test = this.test.bind(this);
         this.getImage = this.getImage.bind(this);
         this.stateArrayTest = this.stateArrayTest.bind(this);
+    }
+
+    test = async () => {
+        var data = new FormData();
+
+        var image = document.getElementById('formControlsImage').files;
+        data.append('image', image);
+
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+
+        await axios.post('http://127.0.0.1:8000/test/', data, config)
+        .then(function (response) {
+            console.log('ㅇㅇㅇㅇㅇ')
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     getImage = async () => {
@@ -67,8 +89,11 @@ class Link2 extends React.Component{
         return(
             <div>
                 임시 작업용 페이지
-                <input type="file" onChange={this.changeFile}/>
-                <button onClick={this.importFile}>Import</button>
+                <FormGroup controlId="formControlsImage">
+                    <ControlLabel>이미지 업로드</ControlLabel>
+                    <FormControl type="file" multiple />
+                </FormGroup>
+                <Button bsClass="btn btn-primary" onClick={ this.test.bind(this) }>test</Button>
                 <hr />
                 <button onClick={this.getImage}>getImageTest</button>
                 {imgInstance}
