@@ -12,6 +12,16 @@ class UploadPost extends React.Component {
         }
 
         this.upload = this.upload.bind(this);
+        this.fileLenCheck = this.fileLenCheck.bind(this);
+    }
+
+    fileLenCheck() {
+        var image = document.getElementById('formControlsImage').files;
+
+        if(image.length > 4){
+            alert("최대 4개의 이미지까지만 선택해 주세요");
+            document.getElementById('formControlsImage').value = null;
+        }
     }
 
     upload = async () => {
@@ -43,6 +53,12 @@ class UploadPost extends React.Component {
             image = null;
             console.log('Not selected');
         } else {
+
+            if(image.length > 4){
+                alert("최대 4개의 이미지까지만 선택해 주세요");
+                document.getElementById('formControlsImage').value = null;
+            }
+            
             var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
             // console.log(fileExtension.indexOf(image['name'].split('.').pop().toLowerCase()));
             for(var i=0; i<image.length; i++){
@@ -150,7 +166,7 @@ class UploadPost extends React.Component {
                         </FormGroup>
                         <FormGroup controlId="formControlsImage">
                             <ControlLabel>이미지 업로드</ControlLabel>
-                            <FormControl type="file" multiple />
+                            <FormControl type="file" onChange={ this.fileLenCheck.bind(this) } multiple />
                         </FormGroup>
                         <Button bsClass="btn btn-primary pull-right" onClick={ this.upload.bind(this) }>Upload</Button>
                     </Col>
