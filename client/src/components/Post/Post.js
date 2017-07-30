@@ -17,11 +17,13 @@ class Post extends React.Component {
             postInfo: null,
             postCount: null,
             showModal: false,
+            showImageModal: false,
             clickedId: 1,
             clickedTitle: null,
             clickedContent: null,
             clickedImg: null,
             clickedImgList: [],
+            clickedImgIdx: null,
         }
 
         this.close = this.close.bind(this);
@@ -39,8 +41,15 @@ class Post extends React.Component {
         })
     }
 
-    close() {
-        this.setState({ showModal: false });
+    close(dist) {
+        switch(dist){
+            case 0:
+                this.setState({ showModal: false });
+                break;
+            case 1:
+                this.setState({ showImageModal: false });
+                break;
+        }
     }
 
     detail = async (id, title, content) => {
@@ -50,7 +59,7 @@ class Post extends React.Component {
             clickedTitle: title,
             clickedContent: content,
         });
-        this.modalOpen();
+        this.modalOpen(0);
         // console.log('clicked ' + idx);
     }
 
@@ -106,11 +115,18 @@ class Post extends React.Component {
         }
     }
 
-    modalOpen() {
+    modalOpen(dist) {
         this.setState({
             showModal: true,
         });
         // console.log('clickId : ' + this.state.clickedId);
+    }
+
+    imageModalOpen = async (idx) => {
+        await this.setState({
+            showImageModal: true,
+            clickedImgIdx: idx,
+        });
     }
     
     render() {
@@ -142,17 +158,18 @@ class Post extends React.Component {
         const clickedContent = this.state.clickedContent;
         var clickedImg = [];
         var clickedImgList = [];
+
         if(!this.state.clickedImg){
             clickedImg = ('');
         }
         else {
             for(var i=0; i<this.state.clickedImgList.length; i++){
                 clickedImgList.push(
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '44%', marginLeft: '3%', marginRight: '3%'}} onClick={this.imageModalOpen.bind(this, i)}/>
                 );
             }
             clickedImg = (
-                <div>
+                <div style={{'text-align': 'center'}}>
                     {clickedImgList}
                     <hr/>
                 </div>
@@ -160,7 +177,7 @@ class Post extends React.Component {
         }
 
         const modalInstance = (
-            <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal show={this.state.showModal} onHide={this.close.bind(this, 0)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
@@ -169,8 +186,30 @@ class Post extends React.Component {
                     {clickedContent}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.close}>Close</Button>
+                    <Button onClick={this.close.bind(this, 0)}>Close</Button>
                 </Modal.Footer>
+            </Modal>
+        );
+
+
+        const clickedImgIdx = this.state.clickedImgIdx;
+        var imgDetail = [];
+
+        if(!clickedImgIdx){
+            imgDetail = ('');
+        } else {
+            imgDetail.push(
+                <div>
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[clickedImgIdx])} /> 
+                </div>
+            )
+        }
+
+        const imageDetailInstance = (
+            <Modal show={this.state.showImageModal} onHide={this.close.bind(this, 1)}>
+                <Modal.Body>
+                    {{imgDetail}}
+                </Modal.Body>
             </Modal>
         );
  
@@ -183,6 +222,7 @@ class Post extends React.Component {
                     <Row>
                         {thumbnailInstance}
                         {modalInstance}
+                        {imageDetailInstance}
                     </Row>
                 </Grid>
             </div>
