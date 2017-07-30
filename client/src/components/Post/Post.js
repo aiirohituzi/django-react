@@ -27,7 +27,7 @@ class Post extends React.Component {
         }
 
         this.close = this.close.bind(this);
-        //this.detail = this.detail.bind(this);
+        this.detail = this.detail.bind(this);
         this.getImage = this.getImage.bind(this);
     }
 
@@ -59,7 +59,7 @@ class Post extends React.Component {
             clickedTitle: title,
             clickedContent: content,
         });
-        this.modalOpen(0);
+        this.modalOpen();
         // console.log('clicked ' + idx);
     }
 
@@ -115,7 +115,7 @@ class Post extends React.Component {
         }
     }
 
-    modalOpen(dist) {
+    modalOpen() {
         this.setState({
             showModal: true,
         });
@@ -127,6 +127,7 @@ class Post extends React.Component {
             showImageModal: true,
             clickedImgIdx: idx,
         });
+        console.log(this.state.clickedImgList[this.state.clickedImgIdx])
     }
     
     render() {
@@ -200,16 +201,16 @@ class Post extends React.Component {
         } else {
             imgDetail.push(
                 <div>
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[clickedImgIdx])} /> 
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[clickedImgIdx])} style={{width: '100%'}} />  
                 </div>
             )
         }
 
         const imageDetailInstance = (
             <Modal show={this.state.showImageModal} onHide={this.close.bind(this, 1)}>
-                <Modal.Body>
-                    {{imgDetail}}
-                </Modal.Body>
+                <Modal.Header closeButton>
+                    {imgDetail}
+                </Modal.Header>
             </Modal>
         );
  
