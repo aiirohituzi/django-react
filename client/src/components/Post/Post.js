@@ -27,6 +27,7 @@ class Post extends React.Component {
         }
 
         this.close = this.close.bind(this);
+        this.imageClose = this.imageClose.bind(this);
         this.detail = this.detail.bind(this);
         this.getImage = this.getImage.bind(this);
     }
@@ -41,15 +42,15 @@ class Post extends React.Component {
         })
     }
 
-    close(dist) {
-        switch(dist){
-            case 0:
-                this.setState({ showModal: false });
-                break;
-            case 1:
-                this.setState({ showImageModal: false });
-                break;
-        }
+    close() {
+        this.setState({ showModal: false });
+    }
+
+    imageClose(){
+        this.setState({
+            showImageModal: false,
+            showModal: true,
+        });
     }
 
     detail = async (id, title, content) => {
@@ -124,8 +125,11 @@ class Post extends React.Component {
 
     imageModalOpen = async (idx) => {
         await this.setState({
-            showImageModal: true,
             clickedImgIdx: idx,
+            showModal: false,
+        });
+        this.setState({
+            showImageModal: true,
         });
         console.log(this.state.clickedImgList[this.state.clickedImgIdx])
     }
@@ -178,7 +182,7 @@ class Post extends React.Component {
         }
 
         const modalInstance = (
-            <Modal show={this.state.showModal} onHide={this.close.bind(this, 0)}>
+            <Modal show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
                     <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
@@ -187,7 +191,7 @@ class Post extends React.Component {
                     {clickedContent}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.close.bind(this, 0)}>Close</Button>
+                    <Button onClick={this.close}>Close</Button>
                 </Modal.Footer>
             </Modal>
         );
@@ -207,7 +211,7 @@ class Post extends React.Component {
         }
 
         const imageDetailInstance = (
-            <Modal show={this.state.showImageModal} onHide={this.close.bind(this, 1)}>
+            <Modal show={this.state.showImageModal} onHide={this.imageClose}>
                 <Modal.Header closeButton>
                     {imgDetail}
                 </Modal.Header>
