@@ -215,9 +215,10 @@ class Post extends React.Component {
         const imageDetailInstance = (
             <Modal show={this.state.showImageModal} onHide={this.imageClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{this.state.clickedImgList[clickedImgIdx]}</Modal.Title>
                 </Modal.Header>
-                {imgDetail}  
+                    {imgDetail}
+                <Modal.Footer>
+                </Modal.Footer>
                 {/* <img src={ require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/2017/07/28/orig/test_image.png") } style={{width: '100%'}} />  */}
             </Modal>
         );
