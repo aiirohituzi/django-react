@@ -30,6 +30,8 @@ class Post extends React.Component {
         this.imageClose = this.imageClose.bind(this);
         this.detail = this.detail.bind(this);
         this.getImage = this.getImage.bind(this);
+        this.modalOpen = this.modalOpen.bind(this);
+        this.imageModalOpen = this.imageModalOpen.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -40,17 +42,6 @@ class Post extends React.Component {
             postInfo,
             postCount
         })
-    }
-
-    close() {
-        this.setState({ showModal: false });
-    }
-
-    imageClose(){
-        this.setState({
-            showImageModal: false,
-            showModal: true,
-        });
     }
 
     detail = async (id, title, content) => {
@@ -124,14 +115,27 @@ class Post extends React.Component {
     }
 
     imageModalOpen = async (idx) => {
+        console.log(idx);
         await this.setState({
             clickedImgIdx: idx,
-            showModal: false,
         });
         this.setState({
+            showModal: false,
             showImageModal: true,
         });
         console.log(this.state.clickedImgList[this.state.clickedImgIdx])
+    }
+
+    close() {
+        this.setState({ showModal: false });
+    }
+
+    imageClose(){
+        this.setState({
+            showImageModal: false,
+            showModal: true,
+            clickedImgIdx: null,
+        });
     }
     
     render() {
@@ -162,27 +166,27 @@ class Post extends React.Component {
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
         var clickedImg = [];
-        var clickedImgList = [];
+        var clickedImgListInstance = [];
 
         if(!this.state.clickedImg){
             clickedImg = ('');
         }
         else {
             for(var i=0; i<this.state.clickedImgList.length; i++){
-                clickedImgList.push(
+                clickedImgListInstance.push(
                     <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '44%', marginLeft: '3%', marginRight: '3%'}} onClick={this.imageModalOpen.bind(this, i)}/>
                 );
             }
             clickedImg = (
-                <div style={{'text-align': 'center'}}>
-                    {clickedImgList}
+                <div style={{textAlign: 'center'}}>
+                    {clickedImgListInstance}
                     <hr/>
                 </div>
             )
         }
 
         const modalInstance = (
-            <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal backdrop='false' show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
                     <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
@@ -200,23 +204,30 @@ class Post extends React.Component {
         const clickedImgIdx = this.state.clickedImgIdx;
         var imgDetail = [];
 
-        if(!clickedImgIdx){
+        if(clickedImgIdx == null){
             imgDetail = ('');
         } else {
             imgDetail.push(
-                <div>
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[clickedImgIdx])} style={{width: '100%'}} />  
-                </div>
+                <img src={ require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/" + this.state.clickedImgList[clickedImgIdx]) } style={{width: '100%'}} />
             )
         }
 
         const imageDetailInstance = (
             <Modal show={this.state.showImageModal} onHide={this.imageClose}>
                 <Modal.Header closeButton>
-                    {imgDetail}
+                    <Modal.Title>{this.state.clickedImgList[clickedImgIdx]}</Modal.Title>
                 </Modal.Header>
+                {imgDetail}  
+                {/* <img src={ require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/2017/07/28/orig/test_image.png") } style={{width: '100%'}} />  */}
             </Modal>
         );
+
+        // console.log('*');
+        // console.log('modalInstance');
+        // console.log(modalInstance);
+        // console.log('imageDetailInstance');
+        // console.log(imageDetailInstance);
+
  
         // show nothing when data is not loaded
         if(postInfo === null) return null;
