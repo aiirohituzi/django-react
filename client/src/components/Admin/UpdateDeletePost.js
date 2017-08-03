@@ -17,6 +17,7 @@ class UpdateDeletePost extends React.Component {
             postInfo: null,
             postCount: null,
             showModal: false,
+            showImageModal: false,
             clickedId: null,
             clickedTitle: null,
             clickedContent: null,
@@ -24,12 +25,16 @@ class UpdateDeletePost extends React.Component {
             clickedImg: null,
             clickedImgList: [],
             update: false,
+            clickedImgIdx: null,
         }
 
         this.close = this.close.bind(this);
+        this.imageClose = this.imageClose.bind(this);
         this.detail = this.detail.bind(this);
         this.delete = this.delete.bind(this);
         this.updateToggle = this.updateToggle.bind(this);
+        this.modalOpen = this.modalOpen.bind(this);
+        this.imageModalOpen = this.imageModalOpen.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -40,13 +45,6 @@ class UpdateDeletePost extends React.Component {
             postInfo,
             postCount
         })
-    }
-
-    close() {
-        this.setState({
-            showModal: false,
-            update: false
-        });
     }
 
     detail = async (id, title, content, listId) => {
@@ -285,6 +283,33 @@ class UpdateDeletePost extends React.Component {
         });
         // console.log('clickId : ' + this.state.clickedId);
     }
+
+    imageModalOpen = async (idx) => {
+        console.log(idx);
+        await this.setState({
+            clickedImgIdx: idx,
+        });
+        this.setState({
+            showModal: false,
+            showImageModal: true,
+        });
+        console.log(this.state.clickedImgList[this.state.clickedImgIdx])
+    }
+
+    close() {
+        this.setState({
+            showModal: false,
+            update: false
+        });
+    }
+
+    imageClose(){
+        this.setState({
+            showImageModal: false,
+            showModal: true,
+            clickedImgIdx: null,
+        });
+    }
     
     render() {
         let postInfo = this.state.postInfo;
@@ -309,20 +334,22 @@ class UpdateDeletePost extends React.Component {
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
         const clickedListId = this.state.clickedListId;
+
         var clickedImg = [];
-        var clickedImgList = [];
+        var clickedImgListInstance = [];
+
         if(!this.state.clickedImg){
             clickedImg = ('');
         }
         else {
             for(var i=0; i<this.state.clickedImgList.length; i++){
-                clickedImgList.push(
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '70%', marginLeft: '15%', marginRight: '15%'}} />
+                clickedImgListInstance.push(
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '44%', marginLeft: '3%', marginRight: '3%'}} onClick={this.imageModalOpen.bind(this, i)} />
                 );
             }
             clickedImg = (
-                <div>
-                    {clickedImgList}
+                <div style={{textAlign: 'center'}}>
+                    {clickedImgListInstance}
                     <hr/>
                 </div>
             )
@@ -367,6 +394,30 @@ class UpdateDeletePost extends React.Component {
                 </Modal.Footer>
             );
         }
+
+
+        const clickedImgIdx = this.state.clickedImgIdx;
+        var imgDetail = [];
+
+        if(clickedImgIdx == null){
+            imgDetail = ('');
+        } else {
+            imgDetail.push(
+                <img src={ require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/" + this.state.clickedImgList[clickedImgIdx]) } style={{width: '100%'}} />
+            )
+        }
+
+        const imageDetailInstance = (
+            <Modal show={this.state.showImageModal} onHide={this.imageClose}>
+                <Modal.Header closeButton>
+                </Modal.Header>
+                    {imgDetail}
+                <Modal.Footer>
+                </Modal.Footer>
+                {/* <img src={ require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/2017/07/28/orig/test_image.png") } style={{width: '100%'}} />  */}
+            </Modal>
+        );
+
  
         // show nothing when data is not loaded
         if(postInfo === null) return null;
@@ -374,9 +425,10 @@ class UpdateDeletePost extends React.Component {
         return (
             <ListGroup>
                 { listInstance }
-                <Modal show={ this.state.showModal } onHide={ this.close }>
+                <Modal backdrop='false' show={ this.state.showModal } onHide={ this.close }>
                     { modalInstance }
                 </Modal>
+                {imageDetailInstance}
             </ListGroup>
         );
     }

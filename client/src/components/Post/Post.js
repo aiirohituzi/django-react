@@ -165,6 +165,7 @@ class Post extends React.Component {
 
         const clickedTitle = this.state.clickedTitle;
         const clickedContent = this.state.clickedContent;
+
         var clickedImg = [];
         var clickedImgListInstance = [];
 
@@ -174,7 +175,7 @@ class Post extends React.Component {
         else {
             for(var i=0; i<this.state.clickedImgList.length; i++){
                 clickedImgListInstance.push(
-                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '44%', marginLeft: '3%', marginRight: '3%'}} onClick={this.imageModalOpen.bind(this, i)}/>
+                    <img src={require("file-loader?name=[sha512:hash:base64:7].[ext]!../../image/"+ this.state.clickedImgList[i])} style={{width: '44%', marginLeft: '3%', marginRight: '3%'}} onClick={this.imageModalOpen.bind(this, i)} />
                 );
             }
             clickedImg = (
