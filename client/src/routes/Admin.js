@@ -29,14 +29,20 @@ class Admin extends React.Component {
     }
     
     login = async () => {
+        var data = new FormData();
+
         var inputId = document.getElementById('formId').value
         var inputPw = document.getElementById('formPassword').value
 
+        const config = {
+            headers: { 'content-type': 'application/x-www-form-urlencoded' }
+        }
+
+        data.append('user', inputId);
+        data.append('password', inputPw);
+
         var isLogin = false;
-        await axios.post('http://127.0.0.1:8000/login/', {
-            user: inputId,
-            password: inputPw
-        })
+        await axios.post('http://127.0.0.1:8000/login/', data, config)
         .then(function (response) {
             // console.log(response.data);
             if(response.data == 'True'){

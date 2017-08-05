@@ -359,8 +359,8 @@ def login(request):
     # print(json.loads(request.body))
     print('Admin Login Request...')
 
-    # username = request.POST.get('user', False)
-    # password = request.POST.get('password', False)
+    username = request.POST.get('user', False)
+    password = request.POST.get('password', False)
     # Postman에서 Post요청할 경우엔 통용되지만 axios를 통해 Post요청 시엔 불통
     # 직렬화 관련 문제인듯, 양측의 request.body에 담기는 데이터 자체가 다르다.
     # Postman :
@@ -368,17 +368,17 @@ def login(request):
     # axios :
     # b'{"user":"admin","password":"asdf1234"}'
 
-    data = json.loads(request.body)
-    username = data['user']
-    password = data['password']
+    # data = json.loads(request.body)
+    # username = data['user']
+    # password = data['password']
 
     # ADMIN_LOGIN = User.objects.get(pk=1).username
     # ADMIN_PASSWORD = User.objects.get(pk=1).password
     # print(User.objects.get(pk=1).username)
     # print(User.objects.get(pk=1).password)
 
-    # print('ID : ' + username)
-    # print('PW : ' + password)
+    print('ID : ' + str(username))
+    print('PW : ' + str(password))
 
     login_valid = (ADMIN_LOGIN == username)
     pwd_valid = check_password(password, ADMIN_PASSWORD)
