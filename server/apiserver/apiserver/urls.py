@@ -29,6 +29,8 @@ from posting.views import getImageByPostId
 from posting.views import my_image
 from posting.views import test
 
+from django.contrib.auth import views as auth_views
+
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
 router.register(r'users', views.UserViewSet)
@@ -45,4 +47,15 @@ urlpatterns = [
     url(r'^images/$', getImageByPostId, name='images'),
     url(r'^myimage/$', my_image, name='myimages'),
     url(r'^test/$', test, name='test'),
+
+    url(
+        r'^accounts/login/',
+        auth_views.login,
+        name='login'
+    ),
+    url(
+        r'^accounts/logout/',
+        auth_views.logout,
+        name='logout'
+    ),
 ]

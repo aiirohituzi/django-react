@@ -136,3 +136,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 # ADMIN_LOGIN = User.objects.get(pk=1).username
 # ADMIN_PASSWORD = 'pbkdf2_sha256$36000$5M8UqzMLMw8S$F8WJ46Fl+ysYVyodYkhcyGrUnbfrpKSpjFtjVx4QHjI='
 # ADMIN_PASSWORD = User.objects.get(pk=1).password
+
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
