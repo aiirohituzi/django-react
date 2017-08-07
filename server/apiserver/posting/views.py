@@ -33,8 +33,12 @@ import base64
 
 import os
 
-ADMIN_LOGIN = User.objects.get(pk=1).username
-ADMIN_PASSWORD = User.objects.get(pk=1).password
+
+from django.contrib.auth import authenticate, login, logout
+
+
+# ADMIN_LOGIN = User.objects.get(pk=1).username
+# ADMIN_PASSWORD = User.objects.get(pk=1).password
 
 
 # Create your views here.
@@ -106,8 +110,8 @@ def uploadPost(request):
     # print(fileCheck)
     # print('---------')
 
-    login_valid = (ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, ADMIN_PASSWORD)
+    # login_valid = (ADMIN_LOGIN == username)
+    # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # dict = {'user': username, 'password': password, 'title': title, 'content': content}
     # qdict = QueryDict('', mutable=True)
@@ -122,7 +126,7 @@ def uploadPost(request):
     user_row = models.User.objects.get(username=request.POST['user'])
     # row = models.User.objects.get(username=username)
 
-    if not login_valid and pwd_valid:
+    if not userCheck(username, password):
         return HttpResponse(False)
 
     # print(user_row.username)
@@ -188,10 +192,10 @@ def updatePost(request):
     
     # print(fileCheck)
 
-    login_valid = (ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, ADMIN_PASSWORD)
+    # login_valid = (ADMIN_LOGIN == username)
+    # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
-    if not login_valid and pwd_valid:
+    if not userCheck(username, password):
         return HttpResponse(False)
 
     result = False
@@ -304,13 +308,13 @@ def deletePost(request):
 
     print(postId)
 
-    login_valid = (ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, ADMIN_PASSWORD)
+    # login_valid = (ADMIN_LOGIN == username)
+    # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # print(login_valid)
     # print(pwd_valid)
 
-    if not login_valid and pwd_valid:
+    if not userCheck(username, password):
         return HttpResponse(False)
 
     result = False
@@ -355,11 +359,11 @@ def deletePost(request):
 
 
 @csrf_exempt
-def login(request):
+def login_user(request):
     # print(json.loads(request.body))
     print('Admin Login Request...')
 
-    username = request.POST.get('user', False)
+    username = request.POST.get('username', False)
     password = request.POST.get('password', False)
     # Postman에서 Post요청할 경우엔 통용되지만 axios를 통해 Post요청 시엔 불통
     # 직렬화 관련 문제인듯, 양측의 request.body에 담기는 데이터 자체가 다르다.
@@ -377,25 +381,47 @@ def login(request):
     # print(User.objects.get(pk=1).username)
     # print(User.objects.get(pk=1).password)
 
-    print('ID : ' + str(username))
-    print('PW : ' + str(password))
 
-    login_valid = (ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, ADMIN_PASSWORD)
+    # print('ID : ' + str(username))
+    # print('PW : ' + str(password))
+
+    # login_valid = (ADMIN_LOGIN == username)
+    # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # print(password)
     # print(settings.ADMIN_PASSWORD)
 
-    print('ID Check... ' + str(login_valid))
-    print('PW Check... ' + str(pwd_valid))
+    # print('ID Check... ' + str(login_valid))
+    # print('PW Check... ' + str(pwd_valid))
 
-    if not (login_valid and pwd_valid):
-        print('Login Failed')
-        return HttpResponse(False)
+    # if not (login_valid and pwd_valid):
+    #     print('Login Failed')
+    #     return HttpResponse(False)
+    # else:
+    #     print('Success Login')
+    #     return HttpResponse(True)
+
+
+
+    result = False
+
+    # print(userCheck(username, password))
+    if userCheck(username, password):
+        # login(request, user)
+        result = True
+        return HttpResponse(result)
     else:
-        print('Success Login')
-        return HttpResponse(True)
+        return HttpResponse(result)
 
+
+def userCheck(username, password):
+    user = authenticate(username=username, password=password)
+
+    print(user)
+    if user is not None:
+        return True
+    else:
+        return False
 
 
 @csrf_exempt
@@ -410,8 +436,8 @@ def uploadImage(request):
     username = request.POST['user']
     password = request.POST['password']
 
-    login_valid = (ADMIN_LOGIN == username)
-    pwd_valid = check_password(password, ADMIN_PASSWORD)
+    # login_valid = (ADMIN_LOGIN == username)
+    # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     # form = ImageForm(request.POST, request.FILES)
 
@@ -421,7 +447,7 @@ def uploadImage(request):
     # print(fileCheck)
     # print('---------')
 
-    if not login_valid and pwd_valid:
+    if not userCheck(username, password):
         return HttpResponse(False)
 
     if fileCheck:

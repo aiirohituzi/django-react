@@ -38,7 +38,7 @@ class Admin extends React.Component {
             headers: { 'content-type': 'application/x-www-form-urlencoded' }
         }
 
-        data.append('user', inputId);
+        data.append('username', inputId);
         data.append('password', inputPw);
 
         var isLogin = false;

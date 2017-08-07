@@ -29,7 +29,6 @@ from posting.views import getImageByPostId
 from posting.views import my_image
 from posting.views import test
 
-from django.contrib.auth import views as auth_views
 
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
@@ -43,19 +42,8 @@ urlpatterns = [
     url(r'^update/$', updatePost, name='update'),
     url(r'^delete/$', deletePost, name='delete'),
     url(r'^upImage/$', uploadImage, name='upImage'),
-    url(r'^login/$', views.login, name='login'),
+    url(r'^login/$', views.login_user, name='login'),
     url(r'^images/$', getImageByPostId, name='images'),
     url(r'^myimage/$', my_image, name='myimages'),
     url(r'^test/$', test, name='test'),
-
-    url(
-        r'^accounts/login/',
-        auth_views.login,
-        name='login'
-    ),
-    url(
-        r'^accounts/logout/',
-        auth_views.logout,
-        name='logout'
-    ),
 ]
