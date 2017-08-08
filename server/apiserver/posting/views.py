@@ -435,6 +435,7 @@ def uploadImage(request):
     fileInfo = request.FILES
     username = request.POST['user']
     password = request.POST['password']
+    postId = request.POST.get('postId', False)
 
     # login_valid = (ADMIN_LOGIN == username)
     # pwd_valid = check_password(password, ADMIN_PASSWORD)
@@ -451,9 +452,12 @@ def uploadImage(request):
         return HttpResponse(False)
 
     if fileCheck:
-        post_row = Posting.objects.all().last()     # 막 업로드 된 최신 게시글에 이미지 FK로 연결
-
-        dict = {'postId': post_row.id,}
+        if postId:
+            dict = {'postId': postId}
+        else:
+            post_row = Posting.objects.all().last()     # 막 업로드 된 최신 게시글에 이미지 FK로 연결
+            dict = {'postId': post_row.id,}
+            
         qdict = QueryDict('', mutable=True)
         qdict.update(dict)
 

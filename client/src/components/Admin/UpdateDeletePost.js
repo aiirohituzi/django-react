@@ -204,7 +204,8 @@ class UpdateDeletePost extends React.Component {
 
                     data.append('user', loginId);
                     data.append('password', loginPw);
-                    data.append('image', image[i])
+                    data.append('image', image[i]);
+                    data.append('postId', postId);
 
                     await axios.post('http://127.0.0.1:8000/upImage/', data, config)
                     .then(function (response) {

@@ -64,6 +64,8 @@ class Admin extends React.Component {
                 loginId: inputId,
                 loginPw: inputPw
             });
+        } else {
+            alert('로그인에 실패하였습니다. ID와 PW를 다시 확인해주세요.')
         }
     }
 
