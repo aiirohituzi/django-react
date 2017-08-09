@@ -187,8 +187,8 @@ def updatePost(request):
     username = request.POST['user']
     password = request.POST['password']
     fileCheck = request.FILES.get('image', False)
-    if(not fileCheck):
-        fileCheck = request.POST.get('image', False)
+    if(not fileCheck):      # not file
+        fileCheck = request.POST.get('image', False)    # None : image delete request / False : Do not anything
     
     # print(fileCheck)
 
@@ -211,8 +211,8 @@ def updatePost(request):
         row.title = title
         row.content = content
 
-        if(fileCheck):
-            if(fileCheck == "None"):
+        if(fileCheck):      # update image or delete image
+            if(fileCheck == "None"):    # delete image
                 print('Update Post Request : Image delete request')
                 isEmpty = False
                 try:
@@ -221,7 +221,7 @@ def updatePost(request):
                     isEmpty = True
                     print(" - This post have not image.")
 
-                if(not isEmpty):
+                if(not isEmpty):    # have image
                     for img_row in img_obj:
                         file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
                         if os.path.isfile(file_path):
@@ -232,7 +232,7 @@ def updatePost(request):
                             return HttpResponse(result)
                         img_row.delete()
                         print("- Image deleted")
-            else:                       # image update
+            else:                       # update image
                 isEmpty = False
                 try:
                     img_obj = Images.objects.filter(postId_id=postId)
@@ -335,7 +335,7 @@ def deletePost(request):
         except Images.DoesNotExist:
             isEmpty = True
 
-        if(not isEmpty):
+        if(not isEmpty):        # have image
             for img_row in img_obj:
                 file_path = os.path.join(settings.FILES_DIR, str(img_row.image))
                 if os.path.isfile(file_path):
@@ -452,9 +452,9 @@ def uploadImage(request):
         return HttpResponse(False)
 
     if fileCheck:
-        if postId:
+        if postId:      # update
             dict = {'postId': postId}
-        else:
+        else:           # new upload
             post_row = Posting.objects.all().last()     # 막 업로드 된 최신 게시글에 이미지 FK로 연결
             dict = {'postId': post_row.id,}
             

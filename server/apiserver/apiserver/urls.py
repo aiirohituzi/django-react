@@ -21,13 +21,14 @@ from rest_framework import routers
 
 from rest_framework.routers import DefaultRouter
 
+from posting.views import login_user
 from posting.views import uploadPost
 from posting.views import updatePost
 from posting.views import deletePost
 from posting.views import uploadImage
 from posting.views import getImageByPostId
-from posting.views import my_image
-from posting.views import test
+# from posting.views import my_image
+# from posting.views import test
 
 
 router = DefaultRouter()
@@ -42,8 +43,8 @@ urlpatterns = [
     url(r'^update/$', updatePost, name='update'),
     url(r'^delete/$', deletePost, name='delete'),
     url(r'^upImage/$', uploadImage, name='upImage'),
-    url(r'^login/$', views.login_user, name='login'),
+    url(r'^login/$', login_user, name='login'),
     url(r'^images/$', getImageByPostId, name='images'),
-    url(r'^myimage/$', my_image, name='myimages'),
-    url(r'^test/$', test, name='test'),
+    # url(r'^myimage/$', my_image, name='myimages'),
+    # url(r'^test/$', test, name='test'),
 ]
