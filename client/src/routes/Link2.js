@@ -26,6 +26,7 @@ class Link2 extends React.Component{
     searchTest = async () => {
         var data = new FormData();
 
+        data.append('category', 'all')
         data.append('keyword', 'test');
 
         const config = {

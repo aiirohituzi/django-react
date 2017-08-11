@@ -33,6 +33,7 @@ import base64
 
 import os
 
+from django.db.models import Q
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -68,17 +69,19 @@ def api_root(request, format=None):
 @csrf_exempt
 def searchPost(request):
     data = []
-    # category = request.POST.get('category', 'title')
+    category = request.POST.get('category', 'title')
     keyword = request.POST['keyword']
 
-    queryset = Posting.objects.filter(title__icontains=keyword).order_by('-id')
+    if category == 'title':
+        queryset = Posting.objects.filter(title__icontains=keyword).order_by('-id')
+    elif category == 'all':
+        queryset = Posting.objects.filter(Q(title__icontains=keyword) | Q(content__icontains=keyword)).order_by('-id')
+
     if queryset.exists():
         for row in queryset:
-            print(row)
             data.append({'id': row.id, 'title': row.title, 'content': row.content, 'owner': str(row.owner)})
 
         data = json.dumps(data)
-        # print(json.dumps(queryset))
     else:
         data = False
     # print(data)
