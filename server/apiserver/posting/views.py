@@ -66,6 +66,26 @@ def api_root(request, format=None):
 
 
 @csrf_exempt
+def searchPost(request):
+    data = []
+    # category = request.POST.get('category', 'title')
+    keyword = request.POST['keyword']
+
+    queryset = Posting.objects.filter(title__icontains=keyword).order_by('-id')
+    if queryset.exists():
+        for row in queryset:
+            print(row)
+            data.append({'id': row.id, 'title': row.title, 'content': row.content, 'owner': str(row.owner)})
+
+        data = json.dumps(data)
+        # print(json.dumps(queryset))
+    else:
+        data = False
+    # print(data)
+    return HttpResponse(data, content_type = "application/json")
+
+
+@csrf_exempt
 def getImageByPostId(request):
     data = []
     postId = request.POST['postId']

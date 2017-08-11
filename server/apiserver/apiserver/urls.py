@@ -27,6 +27,7 @@ from posting.views import updatePost
 from posting.views import deletePost
 from posting.views import uploadImage
 from posting.views import getImageByPostId
+from posting.views import searchPost
 # from posting.views import my_image
 # from posting.views import test
 
@@ -45,6 +46,7 @@ urlpatterns = [
     url(r'^upImage/$', uploadImage, name='upImage'),
     url(r'^login/$', login_user, name='login'),
     url(r'^images/$', getImageByPostId, name='images'),
+    url(r'^search/$', searchPost, name='searchPost'),
     # url(r'^myimage/$', my_image, name='myimages'),
     # url(r'^test/$', test, name='test'),
 ]
