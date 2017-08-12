@@ -57,11 +57,24 @@ class Post extends React.Component {
 
 
     searchPost = async (val) => {
-        alert(this.state.search);
-        // ↓--여기부터 검색 관련 api 요청 코드 작성--↓
+        var keyword = this.state.search;
 
+        var data = new FormData();
 
-        // ↑---------------------------------------↑
+        data.append('category', 'all')
+        data.append('keyword', keyword);
+
+        const config = {
+            headers: { 'content-type': 'application/x-www-form-urlencoded' }
+        }
+
+        await axios.post('http://127.0.0.1:8000/search/', data, config)
+        .then(function (response) {
+            console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
 
