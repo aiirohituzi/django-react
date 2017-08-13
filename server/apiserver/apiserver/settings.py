@@ -125,8 +125,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/server/static/'
 
-REST_FRAMEWORK = {  
-    'PAGE_SIZE': 10
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 10000
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

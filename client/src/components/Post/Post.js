@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import update from 'react-addons-update'    // state안에 array 삽입 위한 라이브러리
 
-import { Grid, Row, Col, Thumbnail, Button, Modal, FormGroup, InputGroup, DropdownButton, FormControl, MenuItem } from 'react-bootstrap';
+import { Grid, Row, Col, Thumbnail, Button, Modal, DropdownButton, MenuItem } from 'react-bootstrap';
 // import Grid from 'react-bootstrap/lib/Grid';
 // import Row from 'react-bootstrap/lib/Row';
 // import Col from 'react-bootstrap/lib/Col';
@@ -34,8 +34,6 @@ class Post extends React.Component {
         this.getImage = this.getImage.bind(this);
         this.modalOpen = this.modalOpen.bind(this);
         this.imageModalOpen = this.imageModalOpen.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.searchPost = this.searchPost.bind(this);
     }
 
     componentWillReceiveProps (nextProps) {
@@ -49,34 +47,6 @@ class Post extends React.Component {
             search
         })
     }
-
-
-    handleChange(e) {
-        this.setState({search: e.target.value});
-    }
-
-
-    searchPost = async (val) => {
-        var keyword = this.state.search;
-
-        var data = new FormData();
-
-        data.append('category', 'all')
-        data.append('keyword', keyword);
-
-        const config = {
-            headers: { 'content-type': 'application/x-www-form-urlencoded' }
-        }
-
-        await axios.post('http://127.0.0.1:8000/search/', data, config)
-        .then(function (response) {
-            console.log(response.data)
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-
 
     detail = async (id, title, content) => {
         await this.getImage(id);
@@ -176,24 +146,6 @@ class Post extends React.Component {
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
         const clickedId = this.state.clickedId;
-        const update = this.state.update;
-        const search = this.state.search;
-
-
-
-        const searchInstance = (
-            <form>
-                <FormGroup>
-                    <InputGroup>
-                        <FormControl type="text" value={ search } onChange={ this.handleChange } />
-                        <InputGroup.Button>
-                            <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>
-                        </InputGroup.Button>
-                    </InputGroup>
-                </FormGroup>
-            </form>
-        )
-
 
         const thumbnailInstance = [];
         for(var i=0; i<postCount; i++) {
@@ -290,7 +242,6 @@ class Post extends React.Component {
             <div>
                 <Grid>
                     <Row>
-                        {searchInstance}
                         {thumbnailInstance}
                         {modalInstance}
                         {imageDetailInstance}
