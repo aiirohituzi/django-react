@@ -99,13 +99,19 @@ export default class PostContainer extends React.Component {
             <Col xs={12} style={{textAlign: 'right'}}>
                 <Form inline>
                     <InputGroup style={{width: '100%', textAlign: 'right'}}>
-                        <FormControl componentClass="select" placeholder="select" style={{width: '20%'}}>
-                            <option value="title">제목</option>
-                            <option value="all">제목+내용</option>
-                        </FormControl>
-                        <FormControl type="text" value={ search } onChange={ this.handleChange } style={{width: '80%'}} />
+                        <InputGroup.Addon style={{width: '20%'}}>
+                            <FormGroup controlId="formControlsSelect" style={{width: '100%'}}>
+                                <FormControl componentClass="select" placeholder="select" style={{width: '100%'}}>
+                                    <option value="title">제목</option>
+                                    <option value="all">제목+내용</option>
+                                </FormControl>
+                            </FormGroup>
+                        </InputGroup.Addon>
+
+                        <FormControl type="text" value={ search } onChange={ this.handleChange } bsSize="lg" style={{width: '100%'}} />
+                        
                         <InputGroup.Button style={{width: '10'}} >
-                            <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>
+                            <Button bsStyle="primary" bsSize="lg" onClick={this.searchPost}>검색</Button>
                         </InputGroup.Button> 
                     </InputGroup>                       
                 </Form>
