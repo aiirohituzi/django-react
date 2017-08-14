@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as service from '../services/post';
 import Post from '../components/Post/Post';
 
-import { Button, ButtonToolbar, Grid, Row, Col, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
+import { Button, Grid, Row, Col, Form, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
 // import Button from 'react-bootstrap/lib/Button';
 // import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 // import Grid from 'react-bootstrap/lib/Grid';
@@ -59,12 +59,13 @@ export default class PostContainer extends React.Component {
 
     searchPost = async (val) => {
         var keyword = this.state.search;
+        var category = document.getElementById('formControlsSelect').value;
 
         var data = new FormData();
 
         var receiveData;
 
-        data.append('category', 'all')
+        data.append('category', category)
         data.append('keyword', keyword);
 
         const config = {
@@ -95,19 +96,32 @@ export default class PostContainer extends React.Component {
 
 
         const searchInstance = (
-            <form>
-                <FormGroup>
-                    <InputGroup>
+            <Col xs={12}>
+                <Form inline>
+                    <FormGroup controlId="formControlsSelect">
+                        <FormControl componentClass="select" placeholder="select">
+                            <option value="title">제목</option>
+                            <option value="all">제목+내용</option>
+                        </FormControl>
+                    </FormGroup>
+                    <FormGroup controlId="formInlineCategory">
                         <FormControl type="text" value={ search } onChange={ this.handleChange } />
-                        <InputGroup.Button>
-                            <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>
-                        </InputGroup.Button>
-                    </InputGroup>
-                </FormGroup>
-            </form>
+                    </FormGroup>                
+                    <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>                        
+                </Form>
+            </Col>
         )
 
 
+        const moreInstance = [];
+
+        if(postInfo != 'False'){
+            moreInstance.push(
+                <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
+            );
+        } else {
+            moreInstance.push();
+        }
 
         return (
             <div>
@@ -115,6 +129,10 @@ export default class PostContainer extends React.Component {
                     <Row>
                         <Col>
                             {searchInstance}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
                             <Post
                                 postCount={ postCount }
                                 postInfo={ postInfo }
@@ -123,9 +141,7 @@ export default class PostContainer extends React.Component {
                     </Row>
                     <Row>
                         <Col xs={12}>
-                            <ButtonToolbar>
-                                <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
-                            </ButtonToolbar>
+                            {moreInstance}
                         </Col>
                     </Row>
                 </Grid>

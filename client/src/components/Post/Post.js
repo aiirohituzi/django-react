@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import update from 'react-addons-update'    // state안에 array 삽입 위한 라이브러리
 
-import { Grid, Row, Col, Thumbnail, Button, Modal, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Grid, Row, Col, Thumbnail, Button, Modal, DropdownButton, MenuItem, Panel } from 'react-bootstrap';
 // import Grid from 'react-bootstrap/lib/Grid';
 // import Row from 'react-bootstrap/lib/Row';
 // import Col from 'react-bootstrap/lib/Col';
@@ -148,23 +148,34 @@ class Post extends React.Component {
         const clickedId = this.state.clickedId;
 
         const thumbnailInstance = [];
-        for(var i=0; i<postCount; i++) {
-            if(postInfo[i] !== undefined){
-                // console.log('확인된 포스트 id : ' + postInfo[i].id)
-                // console.log(thumbnailInstance)
-                thumbnailInstance.push(
-                    <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
-                        <Thumbnail>
-                            <h3>{postInfo[i].title}</h3>
-                            <hr/>
-                            {/*<p>{postInfo[i].content}</p>*/}
-                            <p style={{textAlign:"right"}}>
-                                <Button bsStyle="primary" onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>내용 보기</Button>
-                            </p>
-                        </Thumbnail>
-                    </Col>
-                );
+
+        if(postInfo != 'False'){
+            for(var i=0; i<postCount; i++) {
+                if(postInfo[i] !== undefined){
+                    // console.log('확인된 포스트 id : ' + postInfo[i].id)
+                    // console.log(thumbnailInstance)
+                    thumbnailInstance.push(
+                        <Col xs={12} sm={6} md={4} key={postInfo[i].id}>
+                            <Thumbnail>
+                                <h3>{postInfo[i].title}</h3>
+                                <hr/>
+                                {/*<p>{postInfo[i].content}</p>*/}
+                                <p style={{textAlign:"right"}}>
+                                    <Button bsStyle="primary" onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content) }>내용 보기</Button>
+                                </p>
+                            </Thumbnail>
+                        </Col>
+                    );
+                }
             }
+        } else {
+            thumbnailInstance.push(
+                <Col xs={12}>
+                    <Panel bsStyle="danger">
+                        검색결과가 존재하지 않습니다.
+                    </Panel>
+                </Col>
+            )
         }
 
         const clickedTitle = this.state.clickedTitle;
