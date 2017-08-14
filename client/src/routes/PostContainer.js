@@ -96,19 +96,20 @@ export default class PostContainer extends React.Component {
 
 
         const searchInstance = (
-            <Col xs={12}>
+            <Col xs={12} style={{textAlign: 'right'}}>
                 <Form inline>
-                    <FormGroup controlId="formControlsSelect">
-                        <FormControl componentClass="select" placeholder="select">
+                    <InputGroup style={{width: '100%', textAlign: 'right'}}>
+                        <FormControl componentClass="select" placeholder="select" style={{width: '20%'}}>
                             <option value="title">제목</option>
                             <option value="all">제목+내용</option>
                         </FormControl>
-                    </FormGroup>
-                    <FormGroup controlId="formInlineCategory">
-                        <FormControl type="text" value={ search } onChange={ this.handleChange } />
-                    </FormGroup>                
-                    <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>                        
+                        <FormControl type="text" value={ search } onChange={ this.handleChange } style={{width: '80%'}} />
+                        <InputGroup.Button style={{width: '10'}} >
+                            <Button bsStyle="primary" onClick={this.searchPost}>검색</Button>
+                        </InputGroup.Button> 
+                    </InputGroup>                       
                 </Form>
+                <br/>
             </Col>
         )
 
