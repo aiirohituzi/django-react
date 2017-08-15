@@ -1,8 +1,9 @@
 import React from 'react';
+import axios from 'axios';
 import * as service from '../../services/post';
 import UploadPost from './UploadPost';
 import UpdateDeletePost from './UpdateDeletePost';
-import { Tab, Row, Col, Nav, NavItem, Button } from 'react-bootstrap';
+import { Tab, Row, Col, Nav, NavItem, Button, Form, InputGroup, FormGroup, FormControl } from 'react-bootstrap';
 
 class AdminMenu extends React.Component {
     constructor(props) {
@@ -16,6 +17,8 @@ class AdminMenu extends React.Component {
 
         this.handleMore = this.handleMore.bind(this);
         // this.handleSelect = this.handleSelect.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.searchPost = this.searchPost.bind(this);
     }
 
     componentDidMount() {
@@ -55,10 +58,81 @@ class AdminMenu extends React.Component {
     //     }
     // }
 
+    handleChange(e) {
+        this.setState({search: e.target.value});
+    }
+
+    searchPost = async (val) => {
+        var keyword = this.state.search;
+        var category = document.getElementById('formControlsSelect').value;
+
+        var data = new FormData();
+
+        var receiveData;
+
+        data.append('category', category)
+        data.append('keyword', keyword);
+
+        const config = {
+            headers: { 'content-type': 'application/x-www-form-urlencoded' }
+        }
+
+        await axios.post('http://127.0.0.1:8000/search/', data, config)
+        .then(function (response) {
+            // console.log(response.data)
+            receiveData = response.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        
+        this.setState({
+            postInfo: receiveData,
+        })
+    }
+
     render() {        
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
         const btnValue = this.state.btnValue;
+        const update = this.state.update;
+        const search = this.state.search;
+
+
+        const searchInstance = (
+            <Col xs={12} style={{textAlign: 'right'}}>
+                <Form inline>
+                    <InputGroup style={{width: '100%', textAlign: 'right'}}>
+                        <InputGroup.Addon style={{width: '20%'}}>
+                            <FormGroup controlId="formControlsSelect" style={{width: '100%'}}>
+                                <FormControl componentClass="select" placeholder="select" style={{width: '100%'}}>
+                                    <option value="title">제목</option>
+                                    <option value="all">제목+내용</option>
+                                </FormControl>
+                            </FormGroup>
+                        </InputGroup.Addon>
+
+                        <FormControl type="text" value={ search } onChange={ this.handleChange } bsSize="lg" style={{width: '100%'}} />
+                        
+                        <InputGroup.Button style={{width: '10'}} >
+                            <Button bsStyle="primary" bsSize="lg" onClick={this.searchPost}>검색</Button>
+                        </InputGroup.Button> 
+                    </InputGroup>                       
+                </Form>
+                <br/>
+            </Col>
+        )
+
+        const moreInstance = [];
+
+        if(postInfo != 'False'){
+            moreInstance.push(
+                <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
+            );
+        } else {
+            moreInstance.push();
+        }
 
         const tabsInstance = (
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -79,11 +153,12 @@ class AdminMenu extends React.Component {
                         <UploadPost />
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
+                        { searchInstance }
                         <UpdateDeletePost
                             postCount={ postCount }
                             postInfo={ postInfo }
                         />
-                        <Button bsStyle="primary" block onClick={this.handleMore}>{btnValue}</Button>
+                        { moreInstance }
                     </Tab.Pane>
                     </Tab.Content>
                 </Col>

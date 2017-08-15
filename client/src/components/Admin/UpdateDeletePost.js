@@ -8,7 +8,7 @@ import ContentForm from './ContentForm';
 
 import * as service from '../../services/post';
 
-import { ListGroup, ListGroupItem, Button, Modal } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Modal, Col, Panel } from 'react-bootstrap';
 
 class UpdateDeletePost extends React.Component {
     constructor(props) {
@@ -321,14 +321,25 @@ class UpdateDeletePost extends React.Component {
         }
 
         const listInstance = [];
-        for(var i=0; i<postCount; i++) {
-            if(postInfo[i] !== undefined){
-                listInstance.push(                    
-                    <ListGroupItem key={ postInfo[i].id } onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content, i) }>
-                        { postInfo[i].title }
-                    </ListGroupItem>
-                );
+
+        if(postInfo != 'False'){
+            for(var i=0; i<postCount; i++) {
+                if(postInfo[i] !== undefined){
+                    listInstance.push(                    
+                        <ListGroupItem key={ postInfo[i].id } onClick={ this.detail.bind(this, postInfo[i].id, postInfo[i].title, postInfo[i].content, i) }>
+                            { postInfo[i].title }
+                        </ListGroupItem>
+                    );
+                }
             }
+        } else {
+            listInstance.push(
+                <Col xs={12}>
+                    <Panel bsStyle="danger">
+                        검색결과가 존재하지 않습니다.
+                    </Panel>
+                </Col>
+            )
         }
 
         const clickedId = this.state.clickedId;
