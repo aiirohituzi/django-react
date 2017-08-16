@@ -18,7 +18,8 @@ export default class PostContainer extends React.Component {
         this.state = {
             postInfo: null,
             postCount: 4,
-            btnValue: "더 보기"
+            btnValue: "더 보기",
+            search: "",
         };
 
         this.handleMore = this.handleMore.bind(this);
@@ -91,7 +92,6 @@ export default class PostContainer extends React.Component {
         const postInfo = this.state.postInfo;
         const postCount = this.state.postCount;
         const btnValue = this.state.btnValue;
-        const update = this.state.update;
         const search = this.state.search;
 
 
