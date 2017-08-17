@@ -99,7 +99,13 @@ export default class PostContainer extends React.Component {
             <Col xs={12} style={{textAlign: 'right'}}>
                 <Form inline>
                     <InputGroup style={{width: '100%', textAlign: 'right'}}>
-                        <InputGroup.Addon style={{width: '20%'}}>
+                        <InputGroup.Addon style={{
+                                width: '20%',
+                                paddingTop: '0',
+                                paddingRight: '0',
+                                paddingBottom: '0',
+                                paddingLeft: '0',
+                            }}>
                             <FormGroup controlId="formControlsSelect" style={{width: '100%'}}>
                                 <FormControl componentClass="select" placeholder="select" style={{width: '100%'}}>
                                     <option value="title">제목</option>
@@ -108,10 +114,10 @@ export default class PostContainer extends React.Component {
                             </FormGroup>
                         </InputGroup.Addon>
 
-                        <FormControl type="text" value={ search } onChange={ this.handleChange } bsSize="lg" style={{width: '100%'}} />
+                        <FormControl type="text" value={ search } onChange={ this.handleChange } style={{width: '100%', height: '51'}} />
                         
                         <InputGroup.Button style={{width: '10'}} >
-                            <Button bsStyle="primary" bsSize="lg" onClick={this.searchPost}>검색</Button>
+                            <Button bsStyle="primary" style={{height: '51'}} onClick={this.searchPost}>검색</Button>
                         </InputGroup.Button> 
                     </InputGroup>                       
                 </Form>
