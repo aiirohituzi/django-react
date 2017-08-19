@@ -1,0 +1,54 @@
+
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="app">
+            {{ message }}
+        </div>
+        <div class="container">
+            <div>
+                <ul class="list-group">
+                    <li v-for="story in stories"
+                        class="list-group-item"
+                    >
+                        {{story.writer}} : {{story.plot}}
+                    </li>
+                </ul>
+            </div>
+            <pre>
+                {{ $data }}
+            </pre>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+        <script type="text/javascript"> 
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello Vue!'
+                }
+            })
+
+            new Vue({
+                el: '.container',
+                data: {
+                    stories: [
+                        {
+                            plot: 'asdfasdf',
+                            writer: 'rwers423ewr'
+                        },
+                        {
+                            plot: 'asd34df',
+                            writer: 'rwed634wr'
+                        },
+                        {
+                            plot: 'aslhjklddf',
+                            writer: 'rw13df23ewr'
+                        },
+                    ]
+                }
+            })
+        </script>
+    </body>
+</html>
