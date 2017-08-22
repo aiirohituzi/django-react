@@ -32,6 +32,9 @@ from posting.views import searchPost
 # from posting.views import test
 
 
+from tweetSearch.views import getTweet
+
+
 router = DefaultRouter()
 router.register(r'posting', views.PostingViewSet)
 router.register(r'users', views.UserViewSet)
@@ -49,4 +52,6 @@ urlpatterns = [
     url(r'^search/$', searchPost, name='searchPost'),
     # url(r'^myimage/$', my_image, name='myimages'),
     # url(r'^test/$', test, name='test'),
+
+    url(r'^tweet/$', getTweet, name='getTweet'),
 ]

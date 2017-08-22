@@ -507,6 +507,9 @@ def uploadImage(request):
 
 
 
+
+
+
 def my_image(request):
 
     # postId = request.POST['postId']
