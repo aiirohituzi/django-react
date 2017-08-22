@@ -2,32 +2,9 @@
 import axios from 'axios';
 import update from 'react-addons-update'
 
-import React, { Component } from 'react';
-import Vue, { observer } from 'react-vue';
+import React from 'react';
 
 import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, Form } from 'react-bootstrap';
-
-
-const store = new Vue({
-    data() {
-        return {
-            stories: [
-                {
-                    plot: 'asdfasdf',
-                    writer: 'rwers423ewr'
-                },
-                {
-                    plot: 'asd34df',
-                    writer: 'rwed634wr'
-                },
-                {
-                    plot: 'aslhjklddf',
-                    writer: 'rw13df23ewr'
-                },
-            ]
-        }
-    }
-});
 
 
 class Link2 extends React.Component{
@@ -38,11 +15,10 @@ class Link2 extends React.Component{
             list: [],
             loginId: null,
             loginPw: null,
-            postInfo: null,
         }
 
-
         this.stateArrayTest = this.stateArrayTest.bind(this);
+        this.getTweet = this.getTweet.bind(this);
     }
 
     stateArrayTest() {
@@ -50,9 +26,32 @@ class Link2 extends React.Component{
             list: update(
                 this.state.list, 
                 {
-                    $push: ['1', '2']
+                    $push: ['1', '2', '3']
                 }
             )
+        });
+    }
+
+    getTweet = async () => {
+        var tweets = [];
+
+        await axios.get('http://127.0.0.1:8000/tweet/')
+        .then(function (response) {
+            // console.log(response);
+            if(!(response.data == 'False')){
+                // console.log(response.data.length);
+                for(var i=0; i<response.data.length; i++){
+                    console.log(i + ' : ' + response.data[i])
+                    // tweets.push(response.data[i])
+                }
+                console.log(response)
+                // img = response.data[0]
+            } else {
+                tweets = null;
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 
@@ -63,23 +62,10 @@ class Link2 extends React.Component{
             <div>
             {arr[0]}<br/>
             {arr[1]}<br/>
+            {arr[2]}<br/>
             {arr.length}
             </div>
         );
-
-        const vueInstance = (
-            <div class="container">
-                <div>
-                    <ul class="list-group">
-                        <li v-for="story in stories"
-                            class="list-group-item"
-                        >
-                            {store.stories[1].writer} : {store.stories[0].plot}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        )
 
         return(
             <div>
@@ -87,7 +73,8 @@ class Link2 extends React.Component{
 
                 <button onClick={this.stateArrayTest}>state array test</button>
                 {arrInstance}
-                {vueInstance}
+                <hr/>
+                <button onClick={this.getTweet}>getTweet</button>
             </div>
         );
     }

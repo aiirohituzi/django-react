@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+import json
 import twitter
 
 from . import keysInfo
@@ -13,7 +13,18 @@ api = twitter.Api(consumer_key=keysInfo.Consumer_key,
 
 def getTweet(request):
     # print(api.VerifyCredentials())    # credentials
+
     statuses = api.GetUserTimeline(screen_name=keysInfo.myUserName)
+
+    tweetList = []
+    print(type(tweetList))
+
     for s in statuses:
-        print(s.text + '\n')
-    return HttpResponse('Hello')
+        tweetList.append(s.text)
+        # print(s.text + '\n')
+        # print('----------------------------------------------')
+        
+    response = json.dumps(tweetList)
+    # print(tweetList)
+    print('----------------------------------------------')
+    return HttpResponse(response, content_type = "application/json")
