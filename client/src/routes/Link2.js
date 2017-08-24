@@ -15,6 +15,7 @@ class Link2 extends React.Component{
             list: [],
             loginId: null,
             loginPw: null,
+            tweetList: null,
         }
 
         this.stateArrayTest = this.stateArrayTest.bind(this);
@@ -42,7 +43,7 @@ class Link2 extends React.Component{
                 // console.log(response.data.length);
                 for(var i=0; i<response.data.length; i++){
                     console.log(i + ' : ' + response.data[i])
-                    // tweets.push(response.data[i])
+                    tweets.push(response.data[i])
                 }
                 console.log(response)
                 // img = response.data[0]
@@ -53,10 +54,17 @@ class Link2 extends React.Component{
         .catch(function (error) {
             console.log(error);
         });
+
+        this.setState({
+            tweetList: tweets,
+        });    
     }
 
     render() {
         const arr = this.state.list;
+        const tweetList = this.state.tweetList
+
+        console.log(tweetList);
         
         const arrInstance = (
             <div>
@@ -67,6 +75,24 @@ class Link2 extends React.Component{
             </div>
         );
 
+        const tweetListInstance = [];
+
+        if(tweetList != null){
+            tweetListInstance.push(
+                <div>
+                {tweetList[0]}
+                {tweetList[1]}
+                {tweetList[2]}
+                </div>
+            )
+        } else {
+            tweetListInstance.push(
+                <div>
+                    no data
+                </div>
+            )
+        }
+
         return(
             <div>
                 임시 작업용 페이지
@@ -75,6 +101,7 @@ class Link2 extends React.Component{
                 {arrInstance}
                 <hr/>
                 <button onClick={this.getTweet}>getTweet</button>
+                {tweetList}
             </div>
         );
     }
