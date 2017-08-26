@@ -17,7 +17,11 @@ class Link2 extends React.Component{
             tweetList: null,
         }
 
-        this.getTweet = this.getTweet.bind(this);
+        this.listHandler = this.listHandler.bind(this);
+    }
+
+    componentDidMount() {
+        this.getTweet();
     }
 
     getTweet = async () => {
@@ -47,6 +51,15 @@ class Link2 extends React.Component{
         });    
     }
 
+    listHandler(e){
+        console.log(this)
+        if(e.target.className === 'list-group-item active'){
+          e.target.className = 'list-group-item'
+        }else{
+          e.target.className = 'list-group-item active'
+        }
+    }
+
     render() {
         const tweetList = this.state.tweetList
 
@@ -54,7 +67,7 @@ class Link2 extends React.Component{
         if(tweetList != null){
             for(var i=0; i<tweetList.length; i++){
                 tweetListInstance.push(
-                    <ListGroupItem>
+                    <ListGroupItem onClick={this.listHandler.bind(this)}>
                         {tweetList[i]}
                     </ListGroupItem>
                 );
@@ -69,7 +82,6 @@ class Link2 extends React.Component{
 
         return(
             <Grid>
-                <button onClick={this.getTweet}>getTweet</button>
                 <ListGroup>
                     {tweetListInstance}
                 </ListGroup>
