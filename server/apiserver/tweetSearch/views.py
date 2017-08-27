@@ -12,20 +12,22 @@ api = twitter.Api(consumer_key=keysInfo.Consumer_key,
 
 
 def getTweet(request):
+    Count = request.GET.get('count', 10)
     # print(api.VerifyCredentials())    # credentials
 
-    statuses = api.GetUserTimeline(screen_name=keysInfo.UserName, count=10, include_rts=False, exclude_replies=True)
+    statuses = api.GetUserTimeline(screen_name=keysInfo.UserName, count=Count, include_rts=False, exclude_replies=True)
 
     tweetList = []
-    print(type(tweetList))
+    # print(type(tweetList))
 
     for s in statuses:
-        tweetList.append(s.text)
-        print(s.text + '\n')
-        print('----------------------------------------------')
+        tweetList.append({'id': s.id, 'text': s.text})
+        # print(str(tweetList) + '\n')
+        # print('----------------------------------------------')
         
+    # print(tweetList[0])
     response = json.dumps(tweetList)
-    print(statuses)
+    # print(statuses)
     # print(tweetList)
-    print('----------------------------------------------')
+    # print('----------------------------------------------')
     return HttpResponse(response, content_type = "application/json")

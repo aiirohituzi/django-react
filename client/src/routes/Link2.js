@@ -12,9 +12,8 @@ class Link2 extends React.Component{
         super(props);
 
         this.state = {
-            loginId: null,
-            loginPw: null,
             tweetList: null,
+            count: 10,
         }
 
         this.listHandler = this.listHandler.bind(this);
@@ -26,17 +25,18 @@ class Link2 extends React.Component{
 
     getTweet = async () => {
         var tweets = [];
+        var count = this.state.count;
 
-        await axios.get('http://127.0.0.1:8000/tweet/')
+        await axios.get('http://127.0.0.1:8000/tweet/?count=' + count)
         .then(function (response) {
             // console.log(response);
             if(!(response.data == 'False')){
                 // console.log(response.data.length);
                 for(var i=0; i<response.data.length; i++){
-                    // console.log(i + ' : ' + response.data[i])
-                    tweets.push(response.data[i])
+                    console.log(i + ' : ' + response.data[i]);
+                    tweets.push(response.data[i].text);
                 }
-                console.log(response)
+                console.log(response);
                 // img = response.data[0]
             } else {
                 tweets = null;
@@ -52,16 +52,28 @@ class Link2 extends React.Component{
     }
 
     listHandler(e){
-        console.log(this)
+        console.log(this);
         if(e.target.className === 'list-group-item active'){
-          e.target.className = 'list-group-item'
+          e.target.className = 'list-group-item';
         }else{
-          e.target.className = 'list-group-item active'
+          e.target.className = 'list-group-item active';
+        }
+    }
+
+    more = async () => {
+        await this.setState({
+            count: this.state.count+10,
+        });
+        if(this.state.count<200){
+            this.getTweet();
         }
     }
 
     render() {
-        const tweetList = this.state.tweetList
+        const tweetList = this.state.tweetList;
+        const count = this.state.count;
+
+        var btnValue = "더 보기"
 
         const tweetListInstance = [];
         if(tweetList != null){
@@ -77,7 +89,12 @@ class Link2 extends React.Component{
                 <div>
                     no data
                 </div>
-            )
+            );
+        }
+
+
+        if(count>200){
+            btnValue = "X"
         }
 
         return(
@@ -85,6 +102,7 @@ class Link2 extends React.Component{
                 <ListGroup>
                     {tweetListInstance}
                 </ListGroup>
+                <Button onClick={this.more} block>{ btnValue }</Button>
             </Grid>
         );
     }
