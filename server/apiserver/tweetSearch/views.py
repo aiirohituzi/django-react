@@ -15,15 +15,18 @@ def getTweet(request):
     Count = request.GET.get('count', 10)
     # print(api.VerifyCredentials())    # credentials
 
-    statuses = api.GetUserTimeline(screen_name=keysInfo.UserName, count=Count, include_rts=False, exclude_replies=True)
+    statuses = api.GetUserTimeline(screen_name=keysInfo.UserName, count=Count, include_rts=True, exclude_replies=True)
 
     tweetList = []
     # print(type(tweetList))
 
     for s in statuses:
         tweetList.append({'id': s.id, 'text': s.text})
-        # print(str(tweetList) + '\n')
-        # print('----------------------------------------------')
+        
+        print('place : ' + str(s.place) + '\n')
+        print('urls : ' + str(s.urls) + '\n')
+        print('text : ' + str(s.full_text) + '\n')
+        print('----------------------------------------------')
         
     # print(tweetList[0])
     response = json.dumps(tweetList)

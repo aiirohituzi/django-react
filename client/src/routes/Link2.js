@@ -4,7 +4,7 @@ import update from 'react-addons-update'
 
 import React from 'react';
 
-import { Grid, Button, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Grid, Button, Form, ListGroup, ListGroupItem, Modal } from 'react-bootstrap';
 
 
 class Link2 extends React.Component{
@@ -14,9 +14,13 @@ class Link2 extends React.Component{
         this.state = {
             tweetList: null,
             count: 10,
+            showModal: false,
+            target: null,
         }
 
         this.listHandler = this.listHandler.bind(this);
+        this.modalOpen = this.modalOpen.bind(this);
+        this.close = this.close.bind(this);
     }
 
     componentDidMount() {
@@ -33,7 +37,7 @@ class Link2 extends React.Component{
             if(!(response.data == 'False')){
                 // console.log(response.data.length);
                 for(var i=0; i<response.data.length; i++){
-                    console.log(i + ' : ' + response.data[i]);
+                    // console.log(i + ' : ' + response.data[i]);
                     tweets.push(response.data[i].text);
                 }
                 console.log(response);
@@ -51,12 +55,15 @@ class Link2 extends React.Component{
         });    
     }
 
-    listHandler(e){
-        console.log(this);
+    listHandler = async (e) => {
         if(e.target.className === 'list-group-item active'){
-          e.target.className = 'list-group-item';
+            e.target.className = 'list-group-item';
         }else{
-          e.target.className = 'list-group-item active';
+            e.target.className = 'list-group-item active';
+            await this.setState({
+                target: e.target,
+            });
+            this.modalOpen();
         }
     }
 
@@ -67,6 +74,17 @@ class Link2 extends React.Component{
         if(this.state.count<200){
             this.getTweet();
         }
+    }
+
+    modalOpen() {
+        this.setState({
+            showModal: true,
+        });
+    }
+
+    close() {
+        this.setState({ showModal: false });
+        this.state.target.className = 'list-group-item';
     }
 
     render() {
@@ -92,6 +110,20 @@ class Link2 extends React.Component{
             );
         }
 
+        const modalInstance = (
+            <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal.Header closeButton>
+                    <Modal.Title></Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.close}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+
 
         if(count>200){
             btnValue = "X"
@@ -102,6 +134,7 @@ class Link2 extends React.Component{
                 <ListGroup>
                     {tweetListInstance}
                 </ListGroup>
+                {modalInstance}
                 <Button onClick={this.more} block>{ btnValue }</Button>
             </Grid>
         );
