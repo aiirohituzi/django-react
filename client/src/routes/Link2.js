@@ -16,6 +16,7 @@ class Link2 extends React.Component{
             count: 10,
             showModal: false,
             target: null,
+            modalText: null,
         }
 
         this.listHandler = this.listHandler.bind(this);
@@ -62,6 +63,7 @@ class Link2 extends React.Component{
             e.target.className = 'list-group-item active';
             await this.setState({
                 target: e.target,
+                modalText: e.target.firstChild.nodeValue,
             });
             this.modalOpen();
         }
@@ -90,6 +92,7 @@ class Link2 extends React.Component{
     render() {
         const tweetList = this.state.tweetList;
         const count = this.state.count;
+        const modalText = this.state.modalText;
 
         var btnValue = "더 보기"
 
@@ -116,7 +119,7 @@ class Link2 extends React.Component{
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                
+                    { modalText }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
