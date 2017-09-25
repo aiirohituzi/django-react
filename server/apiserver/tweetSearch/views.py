@@ -19,13 +19,12 @@ def getTweet(request):
 
     tweetList = []
     # print(type(tweetList))
-
     for s in statuses:
-        tweetList.append({'id': s.id, 'text': s.text})
+        tweetList.append({'id': s.id, 'text': (s.text.split("https"))[0]})
         
         # print('place : ' + str(s.place) + '\n')
         # print('urls : ' + str(s.urls) + '\n')
-        # print('text : ' + str(s.full_text) + '\n')
+        # print("text : " + str(s.text) + "\n")
         # print('----------------------------------------------')
 
     # status = api.GetStatus(status_id=statuses[0].id)
@@ -35,5 +34,6 @@ def getTweet(request):
     response = json.dumps(tweetList)
     # print(statuses)
     # print(tweetList)
+    # print(response)
     # print('----------------------------------------------')
     return HttpResponse(response, content_type = "application/json")
