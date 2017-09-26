@@ -20,8 +20,10 @@ def getTweet(request):
     tweetList = []
     # print(type(tweetList))
     for s in statuses:
-        tweetList.append({'id': s.id, 'text': (s.text.split("https"))[0]})
-        
+        url = None
+        if len(s.text.split("https://")) > 1:
+            url = 'https://' + (s.text.split("https://"))[1]
+        tweetList.append({'id': s.id, 'text': (s.text.split("https://"))[0], 'url': url})
         # print('place : ' + str(s.place) + '\n')
         # print('urls : ' + str(s.urls) + '\n')
         # print("text : " + str(s.text) + "\n")

@@ -17,11 +17,14 @@ class Link2 extends React.Component{
             showModal: false,
             target: null,
             modalText: null,
+            urlList: null,
+            modalUrl: null,
         }
 
         this.listHandler = this.listHandler.bind(this);
         this.modalOpen = this.modalOpen.bind(this);
         this.close = this.close.bind(this);
+        this.link = this.link.bind(this);
     }
 
     componentDidMount() {
@@ -30,6 +33,7 @@ class Link2 extends React.Component{
 
     getTweet = async () => {
         var tweets = [];
+        var urls = [];
         var count = this.state.count;
 
         await axios.get('http://127.0.0.1:8000/tweet/?count=' + count)
@@ -40,9 +44,9 @@ class Link2 extends React.Component{
                 for(var i=0; i<response.data.length; i++){
                     // console.log(i + ' : ' + response.data[i]);
                     tweets.push(response.data[i].text);
+                    urls.push(response.data[i].url);
                 }
-                console.log(response);
-                // img = response.data[0]
+                // console.log(response);
             } else {
                 tweets = null;
             }
@@ -53,10 +57,11 @@ class Link2 extends React.Component{
 
         this.setState({
             tweetList: tweets,
+            urlList: urls,
         });    
     }
 
-    listHandler = async (e) => {
+    listHandler = async (i, e) => {
         if(e.target.className === 'list-group-item active'){
             e.target.className = 'list-group-item';
         }else{
@@ -64,6 +69,7 @@ class Link2 extends React.Component{
             await this.setState({
                 target: e.target,
                 modalText: e.target.firstChild.nodeValue,
+                modalUrl: this.state.urlList[i],
             });
             this.modalOpen();
         }
@@ -84,6 +90,10 @@ class Link2 extends React.Component{
         });
     }
 
+    link() {
+        window.open(this.state.modalUrl, '_blank');
+    }
+
     close() {
         this.setState({ showModal: false });
         this.state.target.className = 'list-group-item';
@@ -100,7 +110,7 @@ class Link2 extends React.Component{
         if(tweetList != null){
             for(var i=0; i<tweetList.length; i++){
                 tweetListInstance.push(
-                    <ListGroupItem onClick={this.listHandler.bind(this)}>
+                    <ListGroupItem onClick={this.listHandler.bind(this, i)}>
                         {tweetList[i]}
                     </ListGroupItem>
                 );
@@ -122,6 +132,7 @@ class Link2 extends React.Component{
                     { modalText }
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button onClick={this.link}>원본 링크</Button>
                     <Button onClick={this.close}>Close</Button>
                 </Modal.Footer>
             </Modal>
