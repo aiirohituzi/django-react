@@ -42,7 +42,9 @@ class AdminMenu extends React.Component {
         if(postInfo[this.state.postCount] === undefined){
             this.setState({
                 btnValue: "게시물이 더 이상 존재하지 않습니다."
-            })
+            })            
+            e.target.className = "btn btn-default btn-block"
+            e.target.setAttribute("disabled", "disabled")
         } else{
             this.setState({
                 postCount: this.state.postCount+4

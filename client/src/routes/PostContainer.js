@@ -48,6 +48,9 @@ export default class PostContainer extends React.Component {
             this.setState({
                 btnValue: "게시물이 더 이상 존재하지 않습니다."
             })
+            e.target.className = "btn btn-default btn-block"
+            e.target.setAttribute("disabled", "disabled")
+            // alert(e.target.getAttribute("disabled"))
         } else{
             this.setState({
                 postCount: this.state.postCount+4
@@ -59,7 +62,7 @@ export default class PostContainer extends React.Component {
         this.setState({search: e.target.value});
     }
 
-    searchPost = async (val) => {
+    searchPost = async () => {
         var keyword = this.state.search;
         var category = document.getElementById('formControlsSelect').value;
 
