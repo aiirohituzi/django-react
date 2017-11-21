@@ -440,7 +440,7 @@ def login_user(request):
 def userCheck(username, password):
     user = authenticate(username=username, password=password)
 
-    print(user)
+    # print(user)
     if user is not None:
         return True
     else:
