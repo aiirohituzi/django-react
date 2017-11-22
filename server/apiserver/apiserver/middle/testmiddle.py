@@ -3,6 +3,7 @@ from django.db import connection
 from django.template import Template, Context
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
+from django.core import exceptions
 
 class SimpleMiddleware(object):
     def __init__(self, get_response):
@@ -20,9 +21,6 @@ class SimpleMiddleware(object):
 
         return response
 
-    def process_request(self, request):
-        return
-
     def process_view(self, request, view_func, view_args, view_kwargs):
         print('process_view')
         print(request, view_args, view_func, view_kwargs)
@@ -34,9 +32,13 @@ class SimpleMiddleware(object):
         
         print('process_exception')
         print(request, exception)
+        response = None
 
         if request.path == '/upload/':
-            response = HttpResponse('Forbidden', status=403)
+            if exceptions.ObjectDoesNotExist:
+                response = HttpResponse('Forbidden', status=403)
+            else:
+                response = None
         else:
             response = None
         return response
