@@ -22,6 +22,7 @@ class SimpleMiddleware(object):
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        print('-------------------------------')
         print('process_view')
         print(request, view_args, view_func, view_kwargs)
 
@@ -30,11 +31,17 @@ class SimpleMiddleware(object):
 
     def process_exception(self, request, exception):
         
+        print('-------------------------------')
         print('process_exception')
         print(request, exception)
         response = None
 
         if request.path == '/upload/':
+            if exceptions.ObjectDoesNotExist:
+                response = HttpResponse('Forbidden', status=403)
+            else:
+                response = None
+        elif request.path == '/delete/':
             if exceptions.ObjectDoesNotExist:
                 response = HttpResponse('Forbidden', status=403)
             else:
@@ -58,6 +65,7 @@ class SimpleMiddleware(object):
         #     print(t.render(Context({'sql_log':connection.queries,'nb_sql':len(connection.queries),'execution_sql_time':execution_sql_time})))
         #     print("---------------")
             
+        print('-------------------------------')
         print('process_template_response')
         print(request, response)
         return response

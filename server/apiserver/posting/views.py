@@ -329,7 +329,7 @@ def deletePost(request):
     username = data['user']
     password = data['password']
 
-    print(postId)
+    # print(postId)
 
     # login_valid = (ADMIN_LOGIN == username)
     # pwd_valid = check_password(password, ADMIN_PASSWORD)
