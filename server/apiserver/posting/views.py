@@ -37,6 +37,8 @@ from django.db.models import Q
 
 from django.contrib.auth import authenticate, login, logout
 
+from django.core import exceptions
+
 
 # ADMIN_LOGIN = User.objects.get(pk=1).username
 # ADMIN_PASSWORD = User.objects.get(pk=1).password
@@ -321,13 +323,15 @@ def updatePost(request):
 @csrf_exempt
 def deletePost(request):
     # userInfo = User.objects.get(username=request.POST['user'])
-    # username = request.POST['user']
-    # password = request.POST['password']
 
-    data = json.loads(request.body)
-    postId = data['postId']
-    username = data['user']
-    password = data['password']
+    postId = request.POST['postId']
+    username = request.POST['user']
+    password = request.POST['password']
+
+    # data = json.loads(request.body)
+    # postId = data['postId']
+    # username = data['user']
+    # password = data['password']
 
     # print(postId)
 
@@ -338,7 +342,8 @@ def deletePost(request):
     # print(pwd_valid)
 
     if not userCheck(username, password):
-        return HttpResponse(False)
+        raise exceptions.ObjectDoesNotExist('User matching query does not exist.')
+        # return HttpResponse(False)
 
     result = False
     log = ''
@@ -440,7 +445,7 @@ def login_user(request):
 def userCheck(username, password):
     user = authenticate(username=username, password=password)
 
-    # print(user)
+    print(user)
     if user is not None:
         return True
     else:

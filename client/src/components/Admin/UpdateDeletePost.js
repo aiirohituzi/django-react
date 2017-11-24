@@ -245,18 +245,23 @@ class UpdateDeletePost extends React.Component {
     }
 
     delete = async (postId, listId) => {
+        var data = new FormData();
         var decision = confirm('정말로 삭제하시겠습니까?');
 
         if(decision){
             var loginId = sessionStorage.getItem('loginId');
             var loginPw = sessionStorage.getItem('loginPw');
             var postInfo = this.state.postInfo;
+      
+            data.append('postId', postId);
+            data.append('user', loginId);
+            data.append('password', loginPw);
 
-            await axios.post('http://127.0.0.1:8000/delete/', {
-                postId: postId,
-                user: loginId,
-                password: loginPw
-            })
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+
+            await axios.post('http://127.0.0.1:8000/delete/', data, config)
             .then(function (response) {
                 // console.log(response.data);
                 if(response.data == 'True'){
