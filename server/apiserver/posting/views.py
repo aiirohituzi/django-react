@@ -221,7 +221,8 @@ def updatePost(request):
     # pwd_valid = check_password(password, ADMIN_PASSWORD)
 
     if not userCheck(username, password):
-        return HttpResponse(False)
+        raise exceptions.ObjectDoesNotExist('User matching query does not exist.')
+        # return HttpResponse(False)
 
     result = False
     log = ''

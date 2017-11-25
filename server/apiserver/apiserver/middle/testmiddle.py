@@ -38,11 +38,19 @@ class SimpleMiddleware(object):
 
         if request.path == '/upload/':
             if exceptions.ObjectDoesNotExist:
+                print('*** [upload] Request of unauthorized user ***')
                 response = HttpResponse('Forbidden', status=403)
             else:
                 response = None
         elif request.path == '/delete/':
             if exceptions.ObjectDoesNotExist:
+                print('*** [delete] Request of unauthorized user ***')
+                response = HttpResponse('Forbidden', status=403)
+            else:
+                response = None
+        elif request.path == '/update/':
+            if exceptions.ObjectDoesNotExist:
+                print('*** [update] Request of unauthorized user ***')
                 response = HttpResponse('Forbidden', status=403)
             else:
                 response = None
