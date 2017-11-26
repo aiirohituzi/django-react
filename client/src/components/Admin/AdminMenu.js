@@ -30,7 +30,7 @@ class AdminMenu extends React.Component {
         const info = await service.getPost();
         // console.log(info);
 
-        const postInfo = info.data;
+        const postInfo = info.data.results;
         this.setState({
             postInfo
         });

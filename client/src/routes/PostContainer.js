@@ -35,8 +35,8 @@ export default class PostContainer extends React.Component {
         const info = await service.getPost();
         // console.log(info);
 
-        const postInfo = info.data;
-        // console.log(postInfo);
+        const postInfo = info.data.results;
+        console.log(postInfo);
         this.setState({
             postInfo
         });
@@ -79,7 +79,7 @@ export default class PostContainer extends React.Component {
 
         await axios.post('http://127.0.0.1:8000/search/', data, config)
         .then(function (response) {
-            // console.log(response.data)
+            console.log(response.data)
             receiveData = response.data;
         })
         .catch(function (error) {
