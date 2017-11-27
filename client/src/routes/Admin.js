@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import AdminMenu from '../components/Admin/AdminMenu';
 
-import { Button, Form, FormGroup, Grid, Row, Col, ControlLabel, FormControl } from 'react-bootstrap';
+import { Button, Form, FormGroup, Grid, Row, Col, ControlLabel, FormControl, Checkbox } from 'react-bootstrap';
 
 class Admin extends React.Component {
     constructor(props) {
@@ -131,6 +131,9 @@ class Admin extends React.Component {
                             <Button onClick={this.login}>
                                 Sign in
                             </Button>
+                            <Checkbox checked>
+                                ID 저장
+                            </Checkbox>
                         </Col>
                     </FormGroup>
                 </Form>
