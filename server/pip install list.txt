@@ -2,3 +2,4 @@ pip install djangorestframework
 pip install django-smartfields
 pip install python-twitter
 pip install Pillow
+pip install django-cors-headers

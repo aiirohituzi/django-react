@@ -115,7 +115,7 @@ class Post extends React.Component {
         this.setState({
             showModal: true,
         });
-        // console.log('clickId : ' + this.state.clickedId);
+        console.log('clickId : ' + this.state.clickedId);
     }
 
     imageModalOpen = async (idx) => {
@@ -149,7 +149,7 @@ class Post extends React.Component {
 
         const thumbnailInstance = [];
 
-        if(postInfo != 'False'){
+        if(postInfo != 'False' && postInfo !== undefined){
             for(var i=0; i<postCount; i++) {
                 if(postInfo[i] !== undefined){
                     // console.log('확인된 포스트 id : ' + postInfo[i].id)
@@ -202,7 +202,7 @@ class Post extends React.Component {
         }
 
         const modalInstance = (
-            <Modal backdrop='false' show={this.state.showModal} onHide={this.close}>
+            <Modal show={this.state.showModal} onHide={this.close}>
                 <Modal.Header closeButton>
                     <Modal.Title>{clickedTitle}</Modal.Title>
                 </Modal.Header>
