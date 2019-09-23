@@ -21,15 +21,31 @@ function App() {
 
   const { id, title, content } = response.data[no];
 
+  function click(op) {
+    if (op === '+') {
+      if(no + 1 < response.data.length) {
+        setNo(no + 1);
+      } else {
+        console.log('Max range')
+      }
+    } else if (op === '-') {
+      if(no - 1 >= 0) {
+        setNo(no - 1);
+      } else {
+        console.log('Min range')
+      }
+    }
+  }
+
   return (
     <div>
       <h1>{title}</h1>
       <p>{id}</p>
       <p>{content}</p>
-      <button onClick={() => setNo(no - 1)}>
+      <button onClick={() => click('-')}>
         -
       </button>
-      <button onClick={() => setNo(no + 1)}>
+      <button onClick={() => click('+')}>
         +
       </button>
     </div>
