@@ -4,42 +4,40 @@ import './App.css';
 import useRequest from './useRequest';
 
 function App() {
-  const [response, loading, error] = useRequest(
+  const [responsePt, loadingPt, errorPt] = useRequest(
     'http://127.0.0.1:8000/photos/'
   );
   const [no, setNo] = useState(0);
   
-  const [response2] = useRequest(
+  const [responseImg, loadingImg, errorImg] = useRequest(
     'http://127.0.0.1:8000/images/'
   );
-  // console.log(response)
-  // console.log(response2)
   
-  if (loading) {
+  if (loadingPt || loadingImg) {
     return <div>로딩중..</div>;
   }
 
-  if (error) {
+  if (errorPt || errorImg) {
     return <div>에러 발생!</div>;
   }
 
-  if (!response) return null;
+  if (!responsePt) return null;
 
-  const { title, content } = response.data[no];
+  const { title, content } = responsePt.data[no];
 
-  let image = ''
-  if(response2 !== null){
-    for (let i = 0; i < response2.data.length; i++) {
-      if (response2.data[i].photoId === response.data[no].id) {
-        image = response2.data[i].image;
+  let image = []
+  if(responseImg !== null){
+    for (let i = 0; i < responseImg.data.length; i++) {
+      if (responseImg.data[i].photoId === responsePt.data[no].id) {
+        image.push(responseImg.data[i].image);
+        console.log('path:' + image);
       }
     }
   }
-  console.log('path:' + image);
 
   function click(op) {
     if (op === '+') {
-      if (no + 1 < response.data.length) {
+      if (no + 1 < responsePt.data.length) {
         setNo(no + 1);
       } else {
         console.log('Max range');
@@ -53,6 +51,14 @@ function App() {
     }
   }
 
+  const imgInstance = []
+  for (let item of image) {
+    imgInstance.push(
+      <img src={'http://127.0.0.1:8000/media/photo/' + item}></img>
+    );
+    console.log(item)
+  }
+
   return (
     <div>
       <h1>{title}</h1>
@@ -63,7 +69,7 @@ function App() {
       <button onClick={() => click('+')}>
         +
       </button>
-      <img src={'http://127.0.0.1:8000/media/photo/' + image}></img>
+      <p>{imgInstance}</p>
     </div>
   );
 }
