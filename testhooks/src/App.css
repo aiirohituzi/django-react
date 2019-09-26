@@ -20,3 +20,8 @@
 .App-link {
   color: #09d3ac;
 }
+
+.container {
+  text-align: center;
+  white-space: pre-line;
+}

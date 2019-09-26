@@ -25,6 +25,54 @@ function App() {
 
   const { title, content } = responsePt.data[no];
 
+
+
+  const contentInstance = [];
+  const ytbInstance = [];
+  let temp_content = [];
+
+  let regExp = /(https?:\/\/www.youtube.com\/watch\?v=[^#\&\?\n]{11,11})|(https?:\/\/youtu.be\/[^#\&\?\n]{11,11})/
+  let regExp2 = /((https?:\/\/www.youtube.com\/watch\?v=)([^#\&\?]{11,11}))|((https?:\/\/youtu.be\/)([^#\&\?]{11,11}))/
+  let split_content = content.split(regExp)
+
+  for(let i=0; i<split_content.length; i++){
+    if(regExp.test(split_content[i])){
+      let match = split_content[i].match(regExp2)
+      if(match){
+        let id
+
+        if(match[3]){
+          id = match[3]
+        } else if(match[6]){
+          id = match[6]
+        }
+
+        temp_content.push(split_content[i])
+        
+        ytbInstance.push(
+          <p>
+            <iframe frameBorder='no' src={'http://www.youtube.com/embed/' + id}></iframe>
+          </p>
+        );
+        ytbInstance.push(
+          <p>
+            <a href={match[0]} target='_blank'><font size='1' color='gray'>{match[0]}</font></a>
+          </p>
+        );
+      }
+    } else if(split_content[i] != undefined) {
+      temp_content.push(split_content[i])
+    }
+    if(i==split_content.length-1){
+      if(temp_content.length != 0){
+        contentInstance.push(temp_content)
+      }
+      contentInstance.push(ytbInstance)
+    }
+  }
+
+
+
   let image = []
   if(responseImg !== null){
     for (let i = 0; i < responseImg.data.length; i++) {
@@ -60,16 +108,16 @@ function App() {
   }
 
   return (
-    <div>
+    <div class="container">
       <h1>{title}</h1>
-      <p>{content}</p>
+      <p>{imgInstance}</p>
+      <p>{contentInstance}</p>
       <button onClick={() => click('-')}>
         -
       </button>
       <button onClick={() => click('+')}>
         +
       </button>
-      <p>{imgInstance}</p>
     </div>
   );
 }
