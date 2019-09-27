@@ -22,6 +22,18 @@
 }
 
 .container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80vw;
   text-align: center;
   white-space: pre-line;
+}
+
+p#created {
+  font-size: 8pt;
+  text-align: right;
+}
+
+span#currentId {
+  padding: 5px;
 }

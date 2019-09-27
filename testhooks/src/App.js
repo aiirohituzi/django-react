@@ -23,7 +23,7 @@ function App() {
 
   if (!responsePt) return null;
 
-  const { title, content } = responsePt.data[no];
+  const { id, title, content, created } = responsePt.data[no];
 
 
 
@@ -35,7 +35,7 @@ function App() {
   let regExp2 = /((https?:\/\/www.youtube.com\/watch\?v=)([^#\&\?]{11,11}))|((https?:\/\/youtu.be\/)([^#\&\?]{11,11}))/
   let split_content = content.split(regExp)
 
-  for(let i=0; i<split_content.length; i++){
+  for(let i = 0; i < split_content.length; i++){
     if(regExp.test(split_content[i])){
       let match = split_content[i].match(regExp2)
       if(match){
@@ -60,11 +60,11 @@ function App() {
           </p>
         );
       }
-    } else if(split_content[i] != undefined) {
+    } else if(split_content[i] !== undefined) {
       temp_content.push(split_content[i])
     }
-    if(i==split_content.length-1){
-      if(temp_content.length != 0){
+    if(i === split_content.length - 1){
+      if(temp_content.length !== 0){
         contentInstance.push(temp_content)
       }
       contentInstance.push(ytbInstance)
@@ -110,13 +110,15 @@ function App() {
   return (
     <div class="container">
       <h1>{title}</h1>
+      <p id="created">작성일시: {created.split('.')[0]}</p>
       <p>{imgInstance}</p>
       <p>{contentInstance}</p>
       <button onClick={() => click('-')}>
-        -
+        &lt;&lt; 이전
       </button>
+      <span id="currentId">{id}</span>
       <button onClick={() => click('+')}>
-        +
+        다음 &gt;&gt;
       </button>
     </div>
   );
