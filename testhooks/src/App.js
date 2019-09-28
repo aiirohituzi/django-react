@@ -111,7 +111,7 @@ function App() {
     <div class="container">
       <h1>{title}</h1>
       <p id="created">작성일시: {created.split('.')[0]}</p>
-      <p>{imgInstance}</p>
+      <p class='img-wrapper'>{imgInstance}</p>
       <p>{contentInstance}</p>
       <button onClick={() => click('-')}>
         &lt;&lt; 이전

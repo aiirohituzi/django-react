@@ -37,3 +37,20 @@ p#created {
 span#currentId {
   padding: 5px;
 }
+
+.img-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  width: 42vh;
+  min-height: 21vh;
+  max-height: 42vh;
+  overflow: hidden;
+}
+.img-wrapper img {
+  width: 20vh;
+  height: 20vh;
+  border: 1px solid #ddd;
+  object-fit: cover;
+  border-radius: 5px;
+  /* cursor: pointer; */
+}
