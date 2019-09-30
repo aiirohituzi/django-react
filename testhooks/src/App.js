@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import useRequest from './useRequest';
@@ -102,7 +102,7 @@ function App() {
   const imgInstance = []
   for (let item of image) {
     imgInstance.push(
-      <img src={'http://127.0.0.1:8000/media/photo/' + item}></img>
+      <a target="_blank" rel="noopener noreferrer" href={'http://127.0.0.1:8000/media/photo/' + item}><img src={'http://127.0.0.1:8000/media/photo/' + item}></img></a>
     );
     console.log(item)
   }
@@ -111,7 +111,7 @@ function App() {
     <div class="container">
       <h1>{title}</h1>
       <p id="created">작성일시: {created.split('.')[0]}</p>
-      <p class='img-wrapper'>{imgInstance}</p>
+      <p class="img-wrapper">{imgInstance}</p>
       <p>{contentInstance}</p>
       <button onClick={() => click('-')}>
         &lt;&lt; 이전
