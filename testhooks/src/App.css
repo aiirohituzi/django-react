@@ -78,16 +78,17 @@ span#currentId {
 }
 .modal .modal-box {
   position: fixed;
-  top: 20vh;
-  /* width: fit-content;
-  height: fit-content; */
-  border: 5px solid #ccc;
+  top: 0;
+  width: 80vw;
+  height: 100vh;
   border-radius: 10px;
   background-color: white;
+  line-height: 100vh;
   z-index: 3;
-  /* column-count: 2; */
 }
 .modal .modal-box img {
-  max-width: 60vw;
-  max-height: 60vh;
+  max-width: 75vw;
+  max-height: 95vh;
+  border: 1px solid #ccc;
+  vertical-align: -webkit-baseline-middle;
 }
