@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import useRequest from './useRequest';
@@ -8,6 +8,7 @@ function App() {
     'http://127.0.0.1:8000/photos/'
   );
   const [no, setNo] = useState(0);
+  let [currentImage, setCurrentImage] = useState("");
   
   const [responseImg, loadingImg, errorImg] = useRequest(
     'http://127.0.0.1:8000/images/'
@@ -99,13 +100,33 @@ function App() {
     }
   }
 
-  const imgInstance = []
-  for (let item of image) {
-    imgInstance.push(
-      <a target="_blank" rel="noopener noreferrer" href={'http://127.0.0.1:8000/media/photo/' + item}><img src={'http://127.0.0.1:8000/media/photo/' + item}></img></a>
-    );
-    console.log(item)
+
+  const detailImage = (image) => {
+    setCurrentImage(currentImage = image);
+    toggleModal();
   }
+
+  const toggleModal = () => {
+    const toggleClass = (el, className) => el.classList.toggle(className);
+    toggleClass(document.querySelector('.modal'), 'toggle');
+  }
+
+  const imgInstance = (
+    <div>
+      {image.map((image) => (
+        <img src={'http://127.0.0.1:8000/media/photo/' + image} onClick={() => detailImage(image)}></img>
+      ))}
+    </div>
+  );
+
+  const imgModalInstance = (
+    <div class="modal" onClick={() => toggleModal()}>
+      <div class="modal-background"></div>
+      <div class="modal-box">
+        <img src={'http://127.0.0.1:8000/media/photo/' + currentImage}></img>
+      </div>
+    </div>
+  )
 
   return (
     <div class="container">
@@ -113,6 +134,10 @@ function App() {
       <p id="created">작성일시: {created.split('.')[0]}</p>
       <p class="img-wrapper">{imgInstance}</p>
       <p>{contentInstance}</p>
+      
+      
+      {imgModalInstance}
+
       <button onClick={() => click('-')}>
         &lt;&lt; 이전
       </button>
